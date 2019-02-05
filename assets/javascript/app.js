@@ -1,50 +1,50 @@
-// Selectors
-// var email = $("#inputEmail").val().trim();
-// var password = $("#inputPassword").val().trim();
-// var confPassword = $("#inputConfirmPassword").val().trim();
-// var address = $("#inputAddress").val().trim();
-// var city = $("#inputCity").val().trim();
-// var state = $("#inputState").val().trim();
-// var zip = $("#inputZip").val().trim();
+// // Selectors
+// // var email = $("#inputEmail").val().trim();
+// // var password = $("#inputPassword").val().trim();
+// // var confPassword = $("#inputConfirmPassword").val().trim();
+// // var address = $("#inputAddress").val().trim();
+// // var city = $("#inputCity").val().trim();
+// // var state = $("#inputState").val().trim();
+// // var zip = $("#inputZip").val().trim();
 
-// The values below will be pulled from our location query
-var originLat = "34.02517";
-var originLong = "-118.47488";
-var destLat = "34.06877";
-var destLong = "-118.44896";
+// // The values below will be pulled from our location query
+// var originLat = "34.02517";
+// var originLong = "-118.47488";
+// var destLat = "34.06877";
+// var destLong = "-118.44896";
 
 
-var address = "2029 olympic blvd santa monica, ca 90404"
+// var address = "2029 olympic blvd santa monica, ca 90404"
 
-// This is our API key. Add your own API key between the ""
-var weatherAPI = "265a46d65db9c9a8b164aa9180136f67";
-var mapsAPI = "OEeXUFJsMGPGX6jvueAh5pJ2YyUCzbay";
-var restAPI = "DOF99u8HLWYBY7XS57PcCuQ6aJdh0eWYQVSSRXCj3oWg-OPD8t6QIKTHMkbL-uuJhmVNE-by-DG2tz7bQndWFBjgc_-AF1wbFUD2tLDFQNVrUmAsEHRnJVzA_gZZXHYx";
-var cityName = "burbank";
+// // This is our API key. Add your own API key between the ""
+// var weatherAPI = "265a46d65db9c9a8b164aa9180136f67";
+// var mapsAPI = "OEeXUFJsMGPGX6jvueAh5pJ2YyUCzbay";
+// var restAPI = "DOF99u8HLWYBY7XS57PcCuQ6aJdh0eWYQVSSRXCj3oWg-OPD8t6QIKTHMkbL-uuJhmVNE-by-DG2tz7bQndWFBjgc_-AF1wbFUD2tLDFQNVrUmAsEHRnJVzA_gZZXHYx";
+// var cityName = "burbank";
 
-// Here we are building the URL we need to query the weather database
-var weatherQuery = "https://api.openweathermap.org/data/2.5/forecast?q=" + cityName + ",us&appid=" + weatherAPI;
+// // Here we are building the URL we need to query the weather database
+// var weatherQuery = "https://api.openweathermap.org/data/2.5/forecast?q=" + cityName + ",us&appid=" + weatherAPI;
 
-// AJAX call for weather
-$.ajax({
-  url: weatherQuery,
-  method: "GET"
-}).then(function(response) {
+// // AJAX call for weather
+// $.ajax({
+//   url: weatherQuery,
+//   method: "GET"
+// }).then(function(response) {
 
-  // Create CODE HERE to Log the weatherQuery
-  console.log(weatherQuery)
-  // Create CODE HERE to log the resulting object
-  console.log(response)
-})
+//   // Create CODE HERE to Log the weatherQuery
+//   console.log(weatherQuery)
+//   // Create CODE HERE to log the resulting object
+//   console.log(response)
+// })
 
-// Buidling the URL to query the TomTom map search database
-var locationQuery = "https://api.tomtom.com/search/2/geocode/" + address + ".JSON?countrySet=us&key=" + mapsAPI;
+// // Buidling the URL to query the TomTom map search database
+// var locationQuery = "https://api.tomtom.com/search/2/geocode/" + address + ".JSON?countrySet=us&key=" + mapsAPI;
 
-// AJAX call for location
-$.ajax({
-    url: locationQuery,
-    method: "GET"
-  }).then(function(response) {
+// // AJAX call for location
+// $.ajax({
+//     url: locationQuery,
+//     method: "GET"
+//   }).then(function(response) {
   
 //     // Create CODE HERE to Log the locationQuery
 //     console.log(locationQuery)
@@ -61,26 +61,26 @@ $.ajax({
 //     method: "GET"
 //   }).then(function(response) {
   
-    // Create CODE HERE to Log the locationQuery
-    console.log(durationQuery)
-    // Create CODE HERE to log the resulting object
-    console.log(response)
-  })
+//     // Create CODE HERE to Log the locationQuery
+//     console.log(durationQuery)
+//     // Create CODE HERE to log the resulting object
+//     console.log(response)
+//   })
 
-// Buidling the URL to query the TomTom database for route duration
-var restaurantQuery = "https://api.yelp.com/v3/businesses/search" + originLat + "," + originLong + ":" + destLat + "," + destLong +"/json?&key=" + mapsAPI;
+// // Buidling the URL to query the TomTom database for route duration
+// var restaurantQuery = "https://api.yelp.com/v3/businesses/search" + "/json?&key=" + mapsAPI;
 
-// AJAX call for location
-$.ajax({
-    url: restaurantQuery,
-    method: "GET"
-  }).then(function(response) {
+// // AJAX call for location
+// $.ajax({
+//     url: restaurantQuery,
+//     method: "GET"
+//   }).then(function(response) {
   
-    // Create CODE HERE to Log the locationQuery
-    console.log(durationQuery)
-    // Create CODE HERE to log the resulting object
-    console.log(response)
-  })
+//     // Create CODE HERE to Log the locationQuery
+//     console.log(durationQuery)
+//     // Create CODE HERE to log the resulting object
+//     console.log(response)
+//   })
 
 
 $(document).ready(function(){
@@ -289,6 +289,8 @@ $(document).ready(function(){
                     cell.css("border-right" ,"solid 1px lightgrey");
                 }
                 cell.attr("data-datetime", $("#day-"+day+"-date").attr("data-date")+ " " + time.format("h:mm a"));
+                cell.attr("data-toggle", "modal");
+                cell.attr("data-target", "#event-modal");
                 cell.addClass("event-cell");
                 row.append(cell);
             }
@@ -343,8 +345,10 @@ $(document).ready(function(){
     // On click function to hide address input for add event
     $("#default-location").change(function(){
       $("#new-address").hide();
-  });
+    });
 
+      
+    
     $(document).on("click", ".event-cell", function(){
        $(this).css("background", "linear-gradient(to bottom, #212529 0%,#212529 50%,#212529 50%,#007bff 50%,#007bff 100%)");
        var span = $("<div>");
