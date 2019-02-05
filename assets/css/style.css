@@ -1,3 +1,21 @@
+#myVideo {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    min-width: 100%; 
+    min-height: 100%;
+    z-index: -1;
+}
+
+.calendar{
+    z-index: 1;
+    /* background-color: white !important; */
+    border-radius: 25px;
+    border-color: transparent !important;
+    border-style: transparent !important;
+}
+
+
 .option{
     font-size: 40px;
     border-style: transparent;
@@ -6,7 +24,7 @@
 }
 
 .option:hover{
-    color: red;
+    border-color: grey;
 }
 
 .option:focus{
@@ -47,4 +65,107 @@
     color: red;
     font-weight: bold;
     font-size: 20px;
+}
+
+tr{
+    border: none !important;
+}
+
+td, th{
+    border-top: none !important;
+    border-bottom: none !important;
+    height: 116px !important;
+    min-width: 139px !important;
+}
+
+#day-0-date, #day-1-date, #day-2-date, #day-3-date, #day-4-date, #day-5-date, #day-6-date, #day-7-date{
+    min-width: 139px !important;
+}
+
+#day-7-date{
+    border-right: none !important;
+}
+
+th{
+    text-align: right !important;
+    border-right: solid 1px lightgrey !important;
+}
+.day-display{
+    color:grey;
+    /* text-align: center !important; */
+}
+
+.date-display{
+    font-size: 60px !important;
+    color: black;
+    font-weight: normal !important;
+    /* text-align: right !important; */
+}
+
+caption{
+    caption-side: top !important;
+    font-size: 40px;
+    color: #007bff !important;
+    font-weight: 900;
+}
+
+.nav-events{
+    background-color: transparent !important;
+    font-size: 20px !important;
+}
+
+.nav-event, nav li{
+    color: white !important;
+    background-color: none;
+}
+
+.time-display{
+    vertical-align: top !important;
+    text-align: right;
+    padding-top: 0px !important;
+    padding-right: 1px !important;
+}
+
+.event-cell:hover{
+    border-style: solid !important;
+    border-width: 5px !important;
+    border-color: white !important;
+}
+
+table{
+    width: 1112px !important;
+}
+
+table thead tr{
+    display: block !important;
+}
+
+
+table th,table td{
+    width:116px;
+}
+
+
+table  tbody{
+  display:block;
+  height:500px;
+  overflow:auto;
+}
+
+.active{
+    font-weight: bolder;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.event-cell{
+    position: relative;
+    text-overflow: ellipsis;
+}
+
+@media screen and (min-width: 992px){
+    .right{
+        position: absolute;
+        right: 0 !important;
+    }
 }
