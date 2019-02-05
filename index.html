@@ -11,6 +11,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script type = "text/javascript" src="assets/javascript/app.js"></script>
+    
 </head>
 <body>
     <div class="jumbotron">
@@ -99,5 +100,178 @@
             </div>
         </div>
     </div>
+
+<div class="container">
+    <div class="card" id="add-event">
+        <div class="card-header">
+            <h4>Add an Event</h4>
+        </div>    
+        <div class="card-body">     
+            <form>
+                <div class="form-group row">
+                <label for="inputTitle" class="col-sm-2 col-form-label">Title</label>
+                    <div class="col-sm-10">
+                    <input type="text" class="form-control" id="event-title" placeholder="Team Meeting">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="inputStart" class="col-sm-2 col-form-label">Start Time</label>
+                    <div class="col-sm-10">
+                    <input type="text" class="form-control" id="start-time" placeholder="10:00">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="inputEnd" class="col-sm-2 col-form-label">End Time</label>
+                    <div class="col-sm-10">
+                    <input type="text" class="form-control" id="end-time" placeholder="11:00">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="selectLocation" class="col-sm-2 col-form-label">Location</label>
+                    <div class="col-sm-10">
+                    <select class="form-control" id="select-location">
+                        <option value="default-location">Use Default Location</option>
+                        <option value="add-location">Add New Location</option>
+                    </select>
+                    </div>
+                </div>
+                <div id="new-address">
+                    <div class="form-group row">
+                        <label for="inputAddress" class="col-sm-3 col-form-label text-right">Address</label>
+                        <div class="col-sm-9">
+                        <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">
+                        </div>
+                    </div>
+                        <div class="form-group row">
+                        <label for="inputCity" class="col-sm-3 col-form-label text-right">City<span class="required">*</span></label>
+                        <div class="col-sm-9">
+                        <input type="text" class="form-control" id="inputCity" placeholder="Los Angeles"> 
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="inputState" class="col-sm-3 col-form-label text-right">State<span class = "required">*</span></label>
+                        <div class="col-sm-9">
+                        <input type="text" class="form-control" id="State" placeholder="CA">
+                        </div>
+                    </div>                                
+                    <div class="form-group row">
+                        <label for="inputZip" class="col-sm-3 col-form-label text-right">Zip</label>
+                        <div class="col-sm-9">
+                        <input type="text" class="form-control" id="inputZip" placeholder="90210">                                    
+                        </div>
+                    </div>
+                </div>    
+                <div class="form-group row">
+                    <div class="col-sm-10">
+                    <button type="submit" class="btn btn-primary" id="add-event-btn">Add Event</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>  
+</div>
+
+<div class="container">
+    <div class="card" id="add-restaurant">
+        <div class="card-header">
+            <h4>Add a Restaurant</h4>
+        </div>    
+        <div class="card-body">     
+            <form>
+                <div class="form-group row">
+                <label for="inputName" class="col-sm-2 col-form-label">Name</label>
+                    <div class="col-sm-10">
+                    <input type="text" class="form-control" id="restaurant-name" placeholder="Stella Barra">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="inputCuisine" class="col-sm-2 col-form-label">Cuisine</label>
+                    <div class="col-sm-10">
+                    <input type="text" class="form-control" id="cuisine-type" placeholder="Italian">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="selectLocation" class="col-sm-2 col-form-label">Location</label>
+                    <div class="col-sm-10">
+                    <select class="form-control" id="select-location">
+                        <option value="default-location">Use Default Location</option>
+                        <option value="add-location">Add New Location</option>
+                    </select>
+                    </div>
+                </div>
+                <div id="new-address">
+                    <div class="form-group row">
+                        <label for="inputAddress" class="col-sm-3 col-form-label text-right">Address</label>
+                        <div class="col-sm-9">
+                        <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">
+                        </div>
+                    </div>
+                        <div class="form-group row">
+                        <label for="inputCity" class="col-sm-3 col-form-label text-right">City<span class="required">*</span></label>
+                        <div class="col-sm-9">
+                        <input type="text" class="form-control" id="inputCity" placeholder="Los Angeles"> 
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="inputState" class="col-sm-3 col-form-label text-right">State<span class = "required">*</span></label>
+                        <div class="col-sm-9">
+                        <input type="text" class="form-control" id="State" placeholder="CA">
+                        </div>
+                    </div>                                
+                    <div class="form-group row">
+                        <label for="inputZip" class="col-sm-3 col-form-label text-right">Zip</label>
+                        <div class="col-sm-9">
+                        <input type="text" class="form-control" id="inputZip" placeholder="90210">                                    
+                        </div>
+                    </div>
+                </div>    
+                <div class="form-group row">
+                    <div class="col-sm-10">
+                    <button type="submit" class="btn btn-primary" id="add-event-btn">Add Event</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>  
+</div>
+
+<div class="container">
+    <div class="card" id="add-movie">
+        <div class="card-header">
+            <h4>Add a Movie</h4>
+        </div>    
+        <div class="card-body">     
+            <form>
+                <div class="form-group row">
+                <label for="inputTitle" class="col-sm-2 col-form-label">Title</label>
+                    <div class="col-sm-10">
+                    <input type="text" class="form-control" id="movie-name" placeholder="Movie Title">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="selectLocation" class="col-sm-2 col-form-label">Location</label>
+                    <div class="col-sm-10">
+                    <select class="form-control" id="select-location">
+                        <option value="default-location">Use Default Location</option>
+                        <option value="add-location">Add New Location</option>
+                    </select>
+                    </div>
+                </div>                          
+                <div class="form-group row">
+                    <label for="inputZip" class="col-sm-3 col-form-label text-right">Zip</label>
+                    <div class="col-sm-9">
+                    <input type="text" class="form-control" id="inputZip" placeholder="90210">                                    
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-10">
+                    <button type="submit" class="btn btn-primary" id="add-event-btn">Add Event</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>  
+</div>
+
 </body>
 </html>
