@@ -150,54 +150,89 @@
             <div class="modal-body">
                 <form>
                     <div class="form-group row">
-                        <label for="inputTitle" class="col-sm-2 col-form-label">Title</label>
-                        <div class="col-sm-10">
+                        <label for="inputTitle" class="col-sm-3 col-form-label">Title</label>
+                        <div class="col-sm-9">
                         <input type="text" class="form-control" id="event-title" placeholder="Team Meeting">
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="inputStart" class="col-sm-2 col-form-label">Start Time</label>
-                        <div class="col-sm-10">
-                        <input type="text" class="form-control" id="start-time" placeholder="10:00">
+                        <label for="inputStart" class="col-sm-3 col-form-label">Start Time</label>
+                        <div class="col-sm-9">
+                        <input type="time" class="form-control" id="event-start-time">
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="inputEnd" class="col-sm-2 col-form-label">End Time</label>
-                        <div class="col-sm-10">
-                        <input type="text" class="form-control" id="end-time" placeholder="11:00">
+                        <label for="inputEnd" class="col-sm-3 col-form-label">End Time</label>
+                        <div class="col-sm-9">
+                        <input type="time" class="form-control" id="end-time">
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="selectLocation" class="col-sm-2 col-form-label">Location</label>
-                        <div class="col-sm-10">
-                        <select class="form-control" id="select-location">
+                        <label for="navEnd" class="col-sm-3 col-form-label">Event Location</label>
+                        <div class="col-sm-9">
+                        <select class="form-control" id="event-location">
                             <option value="default-location">Use Default Location</option>
                             <option value="add-location">Add New Location</option>
                         </select>
                         </div>
                     </div>
-                    <div id="new-address">
+                    <div id="event-address">
                         <div class="form-group row">
-                            <label for="inputAddress" class="col-sm-3 col-form-label text-right">Address</label>
-                            <div class="col-sm-9">
+                            <label for="inputAddress" class="col-sm-4 col-form-label text-right">Address</label>
+                            <div class="col-sm-8">
                             <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">
                             </div>
                         </div>
                             <div class="form-group row">
-                            <label for="inputCity" class="col-sm-3 col-form-label text-right">City<span class="required">*</span></label>
-                            <div class="col-sm-9">
+                            <label for="inputCity" class="col-sm-4 col-form-label text-right">City<span class="required">*</span></label>
+                            <div class="col-sm-8">
                             <input type="text" class="form-control" id="inputCity" placeholder="Los Angeles"> 
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label for="inputState" class="col-sm-3 col-form-label text-right">State<span class = "required">*</span></label>
-                            <div class="col-sm-9">
+                            <label for="inputState" class="col-sm-4 col-form-label text-right">State<span class = "required">*</span></label>
+                            <div class="col-sm-8">
                             <input type="text" class="form-control" id="State" placeholder="CA">
                             </div>
                         </div>                                
                         <div class="form-group row">
-                            <label for="inputZip" class="col-sm-3 col-form-label text-right">Zip</label>
-                            <div class="col-sm-9">
+                            <label for="inputZip" class="col-sm-4 col-form-label text-right">Zip</label>
+                            <div class="col-sm-8">
+                            <input type="text" class="form-control" id="inputZip" placeholder="90210">                                    
+                            </div>
+                        </div>
+                    </div>    
+                    <div class="form-group row">
+                        <label for="navStart" class="col-sm-3 col-form-label">Leaving From</label>
+                        <div class="col-sm-9">
+                        <select class="form-control" id="start-location">
+                            <option value="default-location">Use Default Location</option>
+                            <option value="add-location">Add New Location</option>
+                        </select>
+                        </div>
+                    </div>
+                    <div id="start-address">
+                        <div class="form-group row">
+                            <label for="inputAddress" class="col-sm-4 col-form-label text-right">Address</label>
+                            <div class="col-sm-8">
+                            <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">
+                            </div>
+                        </div>
+                            <div class="form-group row">
+                            <label for="inputCity" class="col-sm-4 col-form-label text-right">City<span class="required">*</span></label>
+                            <div class="col-sm-8">
+                            <input type="text" class="form-control" id="inputCity" placeholder="Los Angeles"> 
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="inputState" class="col-sm-4 col-form-label text-right">State<span class = "required">*</span></label>
+                            <div class="col-sm-8">
+                            <input type="text" class="form-control" id="State" placeholder="CA">
+                            </div>
+                        </div>                                
+                        <div class="form-group row">
+                            <label for="inputZip" class="col-sm-4 col-form-label text-right">Zip</label>
+                            <div class="col-sm-8">
                             <input type="text" class="form-control" id="inputZip" placeholder="90210">                                    
                             </div>
                         </div>
@@ -205,7 +240,7 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary">Save changes</button>
+                <button type="button" class="btn btn-primary" id="event-submit" data-dismiss="modal">Save changes</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
         </div>
