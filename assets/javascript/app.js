@@ -255,9 +255,9 @@ $(document).ready(function(){
 
         for (var i = 1; i < 8; i++){
             var current_date = moment(date.format('MMM D YYYY'), 'MMM D YYYY');
-            console.log(date.format('MMM Do'));
+            // console.log(date.format('MMM Do'));
             var dt = current_date.add(i-1, 'days');
-            console.log(i-1+": "+dt.format('MMM Do'));
+            // console.log(i-1+": "+dt.format('MMM Do'));
             $("#day-"+i+"-date").html("<span class = 'day-display'>"+dt.format('dddd')+"</span><br> <span class = 'date-display'>"+dt.format('D')+"</span>");
             $("#day-"+i+"-date").attr("data-date", dt.format("YYYY-MM-DD"));
         
@@ -289,6 +289,7 @@ $(document).ready(function(){
                     cell.css("border-right" ,"solid 1px lightgrey");
                 }
                 cell.attr("data-datetime", $("#day-"+day+"-date").attr("data-date")+ " " + time.format("h:mm a"));
+                cell.val(time.format("HH:mm"))
                 cell.attr("data-toggle", "modal");
                 cell.attr("data-target", "#event-modal");
                 cell.addClass("event-cell");
@@ -300,6 +301,7 @@ $(document).ready(function(){
         $("#scroll-body").append(calendar_body);
     }
 
+
     $("#myVideo").hide();
     $(".calendar-container").hide();
     $(".nav-events").hide();
@@ -309,6 +311,7 @@ $(document).ready(function(){
         event.preventDefault();
         load_calendar(moment());
     });
+    
     $(".sign-in-select").on("click", function(){
         console.log($(this));
         $(this).css("color", "white");
@@ -334,34 +337,54 @@ $(document).ready(function(){
         $(".submit-btn").text("Sign Up");
     });
     
-    // Hide new address on page load
-    // $("#new-address").hide();
-
-    // On click function to show address input for add event
-    $("#add-location").change(function(){
-        $("#new-address").show();
-    });
-
-    // On click function to hide address input for add event
-    $("#default-location").change(function(){
-      $("#new-address").hide();
-    });
-
-      
-    
     $(document).on("click", ".event-cell", function(){
-       $(this).css("background", "linear-gradient(to bottom, #212529 0%,#212529 50%,#212529 50%,#007bff 50%,#007bff 100%)");
-       var span = $("<div>");
-       span.text("Hello what's going on with you today my name is charlie hows it all going la la la la la la la");
-       span.css("position", "absolute");
-       span.css("height", "50%");
-       span.css("width", "100%");
-       span.css("overflow", "hidden");
-       span.css("text-overflow", "ellipsis");
-       span.css("bottom", "0");
-       span.css("left", "0");
-       span.css("display", "block");
-       span.css("white-space", "nowrap");
-       $(this).append(span);
+      // Adds the calendar time selection to the start time input on event form
+      $("#event-start-time").val($(this).val());
+        $(this).css("background", "linear-gradient(to bottom, #212529 0%,#212529 50%,#212529 50%,#007bff 50%,#007bff 100%)");
+        var span = $("<div>");
+        span.css("position", "absolute");
+        span.css("height", "50%");
+        span.css("width", "100%");
+        span.css("overflow", "hidden");
+        span.css("text-overflow", "ellipsis");
+        span.css("bottom", "0");
+        span.css("left", "0");
+        span.css("display", "block");
+        span.css("white-space", "nowrap");
+        $(this).append(span);  
+        // Adds event title to calendar  
+        $("#event-submit").on("click", function(e){
+          e.preventDefault();
+          var eventTitle = $("#event-title").val();
+          $(span).text(eventTitle);
+
+      })
+  
     })
+    
+    // Function to show event address input on event form
+    $(function(showNavEnd){
+      $("#event-address").hide();
+      $("#event-location").change(function(){
+        if ($("#event-location").val() == "add-location") {
+          $("#event-address").show();
+        } else {
+          $("#event-address").hide();
+          }
+      });
+    });
+      
+    // Function to show starting address input on event form
+    $(function(showNavStart){
+      $("#start-address").hide();
+      $("#start-location").change(function(){
+        if ($("#start-location").val() == "add-location") {
+          $("#start-address").show();
+        } else {
+          $("#start-address").hide();
+          }
+      });
+    });
+
+
 });
