@@ -329,6 +329,7 @@ $(document).ready(function(){
                       // $("#name-calendar").text(sessionStorage.getItem("name")+ "'s Calendar");
                       
                       $("nav").css("background-color", "#32383e");
+                      console.log("scrollTop: " + $(".calendar").scrollTop);
               
                       $(".sign-in").hide();
                       $(".calendar-container").show();
@@ -460,23 +461,24 @@ $(document).ready(function(){
                           calendar_body.append(row);
                       }
                       $("#scroll-body").append(calendar_body);
+                      $("#scroll-body").scrollTop(parseFloat(moment().format("HH"))*116);
 
                       current_weather = sessionStorage.getItem("weather");
                       if (current_weather == "Clouds"){
-                          $("#myVideo").attr("src", "https://firebasestorage.googleapis.com/v0/b/calendar-app-47185.appspot.com/o/storm_clouds_timelapse.mp4?alt=media&token=e6db6968-d348-4324-8da4-fa5c290566d9");
+                          $("#myVideo").attr("src", "assets/images/storm_clouds_timelapse.mp4");
                       }
                       else if (current_weather == "Snow"){
-                          $("#myVideo").attr("src", "https://firebasestorage.googleapis.com/v0/b/calendar-app-47185.appspot.com/o/snow.mp4?alt=media&token=e6f26a71-269c-4685-9851-eb6736c9b015");
+                          $("#myVideo").attr("src", "assets/images/snow.mp4");
                           $("#myVideo").css("min-width", "100%");
                       }
                       else if (current_weather == "Rain"){
-                          $("#myVideo").attr("src", "https://firebasestorage.googleapis.com/v0/b/calendar-app-47185.appspot.com/o/storm_raindrops_on_window.mp4?alt=media&token=418e3380-74dc-4baa-8f60-ab81c9a40959");
+                          $("#myVideo").attr("src", "assets/images/storm_raindrops_on_window.mp4");
                       }
                       else if (moment().format("HH:mm") >= "17:30" || moment().format("HH:mm") <= "06:30"){
-                          $("#myVideo").attr("src", "https://firebasestorage.googleapis.com/v0/b/calendar-app-47185.appspot.com/o/Stars.mp4?alt=media&token=82cd5825-301b-44f5-b1d6-1baa8b19132b");
+                          $("#myVideo").attr("src", "assets/images/Rainbow_Nebula_4K_Motion_Background.mp4");
                       }
                       else if (current_weather == "Clear"){
-                          $("#myVideo").attr("src", "https://firebasestorage.googleapis.com/v0/b/calendar-app-47185.appspot.com/o/beach_wide.mp4?alt=media&token=9c49c3d1-f813-406b-8966-58701d1dd342");
+                          $("#myVideo").attr("src", "assets/images/beach_wide.mp4");
                           $("#myVideo").css("height", "120%");
                           $("table").removeClass("table-dark");
                           $("table").css("background-color", "white");
@@ -608,27 +610,43 @@ $(document).ready(function(){
     });
   });
 
+  var someID = ''
   $(document).on("click", ".event-cell", function(){
-     // Adds the calendar time selection to the start time input on event form
-     $("#event-start-time").val($(this).val());
-     $(this).css("background", "linear-gradient(to bottom, #212529 0%,#212529 50%,#212529 50%,#007bff 50%,#007bff 100%)");
-     var span = $("<div>");
-     span.css("position", "absolute");
-     span.css("height", "50%");
-     span.css("width", "100%");
-     span.css("overflow", "hidden");
-     span.css("text-overflow", "ellipsis");
-     span.css("bottom", "0");
-     span.css("left", "0");
-     span.css("display", "block");
-     span.css("white-space", "nowrap");
-     $(this).append(span);  
-     // Adds event title to calendar  
-     $("#event-submit").on("click", function(e){
-       e.preventDefault();
-       var eventTitle = $("#event-title").val();
-       $(span).text(eventTitle);
-  })
+            // Adds the calendar time selection to the start time input on event form
+            $("#event-start-time").val($(this).val());//puts start time in event modal relative to cell selected
+            $(this).css("background", "linear-gradient(to bottom, #212529 0%,#212529 50%,#212529 50%,#007bff 50%,#007bff 100%)");
+            someID = $(this).attr("data-datetime").split(' ').join('');
+            var span = $("<div>");
+            span.attr('id', someID)
+            span.css("position", "absolute");
+            span.css("height", "50%");
+            span.css("width", "100%");
+            span.css("overflow", "hidden");
+            span.css("text-overflow", "ellipsis");
+            span.css("bottom", "0");
+            span.css("left", "0");
+            span.css("display", "block");
+            span.css("white-space", "nowrap");
+            $(this).append(span);  
+            // Adds event title to calendar
+
+          $("#event-submit").on("click", function(e){
+            e.preventDefault();
+            var eventTitle = $("#event-title").val();
+            var eventAddress = $("#event-address").val();
+            var eventCity = $("#event-city").val();
+            var eventState = $("#event-state").val();
+            var eventZip = $("#event-zip").val();
+            var whatwewant = document.getElementById(someID);
+            whatwewant.innerHTML = eventTitle;
+            $("#event-title").val("");
+            $("#event-address").val("");
+            $("#event-city").val("");
+            $("#event-state").val("");
+            $("#event-zip").val("");
+            showNavEnd();
+            showNavStart();
+        })
 
       // Function to show event address input on event form
       $(function(showNavEnd){
