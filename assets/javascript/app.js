@@ -463,20 +463,20 @@ $(document).ready(function(){
 
                       current_weather = sessionStorage.getItem("weather");
                       if (current_weather == "Clouds"){
-                          $("#myVideo").attr("src", "assets/images/storm_clouds_timelapse.mp4");
+                          $("#myVideo").attr("src", "https://firebasestorage.googleapis.com/v0/b/calendar-app-47185.appspot.com/o/storm_clouds_timelapse.mp4?alt=media&token=e6db6968-d348-4324-8da4-fa5c290566d9");
                       }
                       else if (current_weather == "Snow"){
-                          $("#myVideo").attr("src", "assets/images/snow.mp4");
+                          $("#myVideo").attr("src", "https://firebasestorage.googleapis.com/v0/b/calendar-app-47185.appspot.com/o/snow.mp4?alt=media&token=e6f26a71-269c-4685-9851-eb6736c9b015");
                           $("#myVideo").css("min-width", "100%");
                       }
                       else if (current_weather == "Rain"){
-                          $("#myVideo").attr("src", "assets/images/storm_raindrops_on_window.mp4");
+                          $("#myVideo").attr("src", "https://firebasestorage.googleapis.com/v0/b/calendar-app-47185.appspot.com/o/storm_raindrops_on_window.mp4?alt=media&token=418e3380-74dc-4baa-8f60-ab81c9a40959");
                       }
                       else if (moment().format("HH:mm") >= "17:30" || moment().format("HH:mm") <= "06:30"){
-                          $("#myVideo").attr("src", "assets/images/Stars.mp4");
+                          $("#myVideo").attr("src", "https://firebasestorage.googleapis.com/v0/b/calendar-app-47185.appspot.com/o/Stars.mp4?alt=media&token=82cd5825-301b-44f5-b1d6-1baa8b19132b");
                       }
                       else if (current_weather == "Clear"){
-                          $("#myVideo").attr("src", "assets/images/beach_wide.mp4");
+                          $("#myVideo").attr("src", "https://firebasestorage.googleapis.com/v0/b/calendar-app-47185.appspot.com/o/beach_wide.mp4?alt=media&token=9c49c3d1-f813-406b-8966-58701d1dd342");
                           $("#myVideo").css("height", "120%");
                           $("table").removeClass("table-dark");
                           $("table").css("background-color", "white");
