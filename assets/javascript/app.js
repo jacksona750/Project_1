@@ -1,13 +1,13 @@
-// Selectors
-// var email = $("#inputEmail").val().trim();
-// var password = $("#inputPassword").val().trim();
-// var confPassword = $("#inputConfirmPassword").val().trim();
-// var address = $("#inputAddress").val().trim();
-// var city = $("#inputCity").val().trim();
-// var state = $("#inputState").val().trim();
-// var zip = $("#inputZip").val().trim();
+// // Selectors
+// // var email = $("#inputEmail").val().trim();
+// // var password = $("#inputPassword").val().trim();
+// // var confPassword = $("#inputConfirmPassword").val().trim();
+// // var address = $("#inputAddress").val().trim();
+// // var city = $("#inputCity").val().trim();
+// // var state = $("#inputState").val().trim();
+// // var zip = $("#inputZip").val().trim();
 
-// The values below will be pulled from our location query
+// // The values below will be pulled from our location query
 // var originLat = "34.02517";
 // var originLong = "-118.47488";
 // var destLat = "34.06877";
@@ -18,7 +18,8 @@
 
 // This is our API key. Add your own API key between the ""
 // var weatherAPI = "265a46d65db9c9a8b164aa9180136f67";
-// var mapsAPI ="OEeXUFJsMGPGX6jvueAh5pJ2YyUCzbay"
+// var mapsAPI = "OEeXUFJsMGPGX6jvueAh5pJ2YyUCzbay";
+// var restAPI = "DOF99u8HLWYBY7XS57PcCuQ6aJdh0eWYQVSSRXCj3oWg-OPD8t6QIKTHMkbL-uuJhmVNE-by-DG2tz7bQndWFBjgc_-AF1wbFUD2tLDFQNVrUmAsEHRnJVzA_gZZXHYx";
 // var cityName = "burbank";
 
 // // // Here we are building the URL we need to query the weather database
@@ -71,6 +72,23 @@
 //     // Create CODE HERE to log the resulting object
 //     console.log(response)
 //   })
+
+// // Buidling the URL to query the TomTom database for route duration
+// var restaurantQuery = "https://api.yelp.com/v3/businesses/search" + "/json?&key=" + mapsAPI;
+
+// // AJAX call for location
+// $.ajax({
+//     url: restaurantQuery,
+//     method: "GET"
+//   }).then(function(response) {
+  
+//     // Create CODE HERE to Log the locationQuery
+//     console.log(durationQuery)
+//     // Create CODE HERE to log the resulting object
+//     console.log(response)
+//   })
+
+
 $(document).ready(function(){
     // Initialize Firebase
   var config = {
@@ -432,6 +450,10 @@ $(document).ready(function(){
                               }
                               cell.attr("data-datetime", $("#day-"+day+"-date").attr("data-date")+ " " + time.format("h:mm a"));
                               cell.addClass("event-cell");
+                              cell.val(time.format("HH:mm"))
+                              cell.val(time.format("HH:mm"))
+                              cell.attr("data-toggle", "modal");
+                              cell.attr("data-target", "#event-modal");
                               row.append(cell);
                           }
               
@@ -583,12 +605,14 @@ $(document).ready(function(){
         }).catch(function(error) {
           // An error happened.
         });
+    });
   });
 
   $(document).on("click", ".event-cell", function(){
+     // Adds the calendar time selection to the start time input on event form
+     $("#event-start-time").val($(this).val());
      $(this).css("background", "linear-gradient(to bottom, #212529 0%,#212529 50%,#212529 50%,#007bff 50%,#007bff 100%)");
      var span = $("<div>");
-     span.text("Hello what's going on with you today my name is charlie hows it all going la la la la la la la");
      span.css("position", "absolute");
      span.css("height", "50%");
      span.css("width", "100%");
@@ -598,6 +622,35 @@ $(document).ready(function(){
      span.css("left", "0");
      span.css("display", "block");
      span.css("white-space", "nowrap");
-     $(this).append(span);
+     $(this).append(span);  
+     // Adds event title to calendar  
+     $("#event-submit").on("click", function(e){
+       e.preventDefault();
+       var eventTitle = $("#event-title").val();
+       $(span).text(eventTitle);
   })
+
+      // Function to show event address input on event form
+      $(function(showNavEnd){
+        $("#event-address").hide();
+        $("#event-location").change(function(){
+          if ($("#event-location").val() == "add-location") {
+            $("#event-address").show();
+          } else {
+            $("#event-address").hide();
+            }
+        });
+      });
+        
+      // Function to show starting address input on event form
+      $(function(showNavStart){
+        $("#start-address").hide();
+        $("#start-location").change(function(){
+          if ($("#start-location").val() == "add-location") {
+            $("#start-address").show();
+          } else {
+            $("#start-address").hide();
+            }
+        });
+      });
 });

@@ -41,13 +41,13 @@
             </ul>
             <ul class="navbar-nav mr-auto right">
             <li class="nav-item nav-event nav-text">
-                <a class="nav-link" href="#">Add an event</a>
+                <a class="nav-link" href="#" data-toggle="modal" data-target="#event-modal">Add an event</a>
             </li>
             <li class="nav-item nav-event">
-                <a class="nav-link" href="#">Add a movie</a>
+                <a class="nav-link" href="#" data-toggle="modal" data-target="#movie-modal">Add a movie</a>
             </li>
             <li class="nav-item nav-event">
-                <a class="nav-link" href="#">Add a restaurant</a>
+                <a class="nav-link" href="#" data-toggle="modal" data-target="#restaurant-modal">Add a restaurant</a>
             </li>
             <li class="nav-item nav-event">
                 <a class="nav-link" id = "sign-out">Sign Out</div>
@@ -136,6 +136,229 @@
             </div>
         </div>
     </div>
+
+<div class="container">
+    <div class="modal" tabindex="-1" role="dialog" id="event-modal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add an Event</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group row">
+                        <label for="inputTitle" class="col-sm-3 col-form-label">Title</label>
+                        <div class="col-sm-9">
+                        <input type="text" class="form-control" id="event-title" placeholder="Team Meeting">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="inputStart" class="col-sm-3 col-form-label">Start Time</label>
+                        <div class="col-sm-9">
+                        <input type="time" class="form-control" id="event-start-time">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="inputEnd" class="col-sm-3 col-form-label">End Time</label>
+                        <div class="col-sm-9">
+                        <input type="time" class="form-control" id="end-time">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="navEnd" class="col-sm-3 col-form-label">Event Location</label>
+                        <div class="col-sm-9">
+                        <select class="form-control" id="event-location">
+                            <option value="default-location">Use Default Location</option>
+                            <option value="add-location">Add New Location</option>
+                        </select>
+                        </div>
+                    </div>
+                    <div id="event-address">
+                        <div class="form-group row">
+                            <label for="inputAddress" class="col-sm-4 col-form-label text-right">Address</label>
+                            <div class="col-sm-8">
+                            <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">
+                            </div>
+                        </div>
+                            <div class="form-group row">
+                            <label for="inputCity" class="col-sm-4 col-form-label text-right">City<span class="required">*</span></label>
+                            <div class="col-sm-8">
+                            <input type="text" class="form-control" id="inputCity" placeholder="Los Angeles"> 
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="inputState" class="col-sm-4 col-form-label text-right">State<span class = "required">*</span></label>
+                            <div class="col-sm-8">
+                            <input type="text" class="form-control" id="State" placeholder="CA">
+                            </div>
+                        </div>                                
+                        <div class="form-group row">
+                            <label for="inputZip" class="col-sm-4 col-form-label text-right">Zip</label>
+                            <div class="col-sm-8">
+                            <input type="text" class="form-control" id="inputZip" placeholder="90210">                                    
+                            </div>
+                        </div>
+                    </div>    
+                    <div class="form-group row">
+                        <label for="navStart" class="col-sm-3 col-form-label">Leaving From</label>
+                        <div class="col-sm-9">
+                        <select class="form-control" id="start-location">
+                            <option value="default-location">Use Default Location</option>
+                            <option value="add-location">Add New Location</option>
+                        </select>
+                        </div>
+                    </div>
+                    <div id="start-address">
+                        <div class="form-group row">
+                            <label for="inputAddress" class="col-sm-4 col-form-label text-right">Address</label>
+                            <div class="col-sm-8">
+                            <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">
+                            </div>
+                        </div>
+                            <div class="form-group row">
+                            <label for="inputCity" class="col-sm-4 col-form-label text-right">City<span class="required">*</span></label>
+                            <div class="col-sm-8">
+                            <input type="text" class="form-control" id="inputCity" placeholder="Los Angeles"> 
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="inputState" class="col-sm-4 col-form-label text-right">State<span class = "required">*</span></label>
+                            <div class="col-sm-8">
+                            <input type="text" class="form-control" id="State" placeholder="CA">
+                            </div>
+                        </div>                                
+                        <div class="form-group row">
+                            <label for="inputZip" class="col-sm-4 col-form-label text-right">Zip</label>
+                            <div class="col-sm-8">
+                            <input type="text" class="form-control" id="inputZip" placeholder="90210">                                    
+                            </div>
+                        </div>
+                    </div>    
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="event-submit" data-dismiss="modal">Save changes</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="container">
+    <div class="modal" tabindex="-1" role="dialog" id="restaurant-modal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add a Restaurant</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        <div class="modal-body">  
+            <form>
+                <div class="form-group row">
+                <label for="inputName" class="col-sm-2 col-form-label">Name</label>
+                    <div class="col-sm-10">
+                    <input type="text" class="form-control" id="restaurant-name" placeholder="Stella Barra">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="inputCuisine" class="col-sm-2 col-form-label">Cuisine</label>
+                    <div class="col-sm-10">
+                    <input type="text" class="form-control" id="cuisine-type" placeholder="Italian">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="selectLocation" class="col-sm-2 col-form-label">Location</label>
+                    <div class="col-sm-10">
+                    <select class="form-control" id="select-location">
+                        <option value="default-location">Use Default Location</option>
+                        <option value="add-location">Add New Location</option>
+                    </select>
+                    </div>
+                </div>
+                <div id="new-address">
+                    <div class="form-group row">
+                        <label for="inputAddress" class="col-sm-3 col-form-label text-right">Address</label>
+                        <div class="col-sm-9">
+                        <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">
+                        </div>
+                    </div>
+                        <div class="form-group row">
+                        <label for="inputCity" class="col-sm-3 col-form-label text-right">City<span class="required">*</span></label>
+                        <div class="col-sm-9">
+                        <input type="text" class="form-control" id="inputCity" placeholder="Los Angeles"> 
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="inputState" class="col-sm-3 col-form-label text-right">State<span class = "required">*</span></label>
+                        <div class="col-sm-9">
+                        <input type="text" class="form-control" id="State" placeholder="CA">
+                        </div>
+                    </div>                                
+                    <div class="form-group row">
+                        <label for="inputZip" class="col-sm-3 col-form-label text-right">Zip</label>
+                        <div class="col-sm-9">
+                        <input type="text" class="form-control" id="inputZip" placeholder="90210">                                    
+                        </div>
+                    </div>
+                </div>    
+             </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary">Save changes</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+    </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="modal" tabindex="-1" role="dialog" id="movie-modal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add a Movie</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">    
+            <form>
+                <div class="form-group row">
+                <label for="inputTitle" class="col-sm-2 col-form-label">Title</label>
+                    <div class="col-sm-10">
+                    <input type="text" class="form-control" id="movie-name" placeholder="Movie Title">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="selectLocation" class="col-sm-2 col-form-label">Location</label>
+                    <div class="col-sm-10">
+                    <select class="form-control" id="select-location">
+                        <option value="default-location">Use Default Location</option>
+                        <option value="add-location">Add New Location</option>
+                    </select>
+                    </div>
+                </div>                          
+                <div class="form-group row">
+                    <label for="inputZip" class="col-sm-3 col-form-label text-right">Zip</label>
+                    <div class="col-sm-9">
+                    <input type="text" class="form-control" id="inputZip" placeholder="90210">                                    
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary">Save changes</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+    </div>
+</div>
+</div>
 
     <div class = "container calendar-container mt-2">
         <div class = "table-responsive">
