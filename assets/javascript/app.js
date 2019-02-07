@@ -259,9 +259,21 @@ $(document).ready(function(){
       }
   }
 
+  function add_event(uid, title, start_date, end_date, time, start_loc, end_loc){
+      database.ref(uid+"/events").push({
+          event_title: title,
+          start_date: start_date,
+          end_date: end_date,
+          time: time,
+          start_loc: start_loc,
+          end_loc: end_loc
+      });
+  }
+
   firebase.auth().onAuthStateChanged(function(user) {
       if (user) {
         // User is signed in.
+        sessionStorage.setItem("uid", user.uid);
         if(which_form() == "Sign Up" && $("#inputName").val().trim() != ""){
           database.ref(user.uid).set({
               name: $("#inputName").val().trim(),
@@ -278,7 +290,6 @@ $(document).ready(function(){
                   last_login: moment().format("YYYY-MM-DD hh:mm a")
               });
           }
-      sessionStorage.setItem("uid", user.uid);
       // database.ref(user.uid).on("value", function(snapshot){
       //     console.log("working");
       //     sessionStorage.clear();
@@ -302,9 +313,9 @@ $(document).ready(function(){
     
 
   function load_calendar(date, uid){
-      database.ref(uid).on("value", function(snapshot){
+      database.ref(uid).once("value").then(function(snapshot){
           console.log("working");
-          sessionStorage.clear();
+        //   sessionStorage.clear();
           sessionStorage.setItem("name", snapshot.val().name);
           console.log("name in storage");
           sessionStorage.setItem("zip", snapshot.val().zip);
@@ -324,13 +335,15 @@ $(document).ready(function(){
                   url: weatherQuery,
                   method: "GET"
                 }).then(function(response) {
-                      $("#month-caption").text(date.format('MMMM YYYY'));
+                    $("#month-caption").text("");
+                      $("#month-caption").prepend(date.format('MMMM YYYY'));
 
                       // $("#name-calendar").text(sessionStorage.getItem("name")+ "'s Calendar");
                       
-                      $("nav").css("background-color", "#32383e");
                       console.log("scrollTop: " + $(".calendar").scrollTop);
-              
+                    
+                      $("#date-jump-text").val(date.format("YYYY-MM-DD"));
+
                       $(".sign-in").hide();
                       $(".calendar-container").show();
                       $(".nav-events").show();
@@ -349,20 +362,20 @@ $(document).ready(function(){
                           var dt = current_date.add(i-1, 'days');
                           console.log(i-1+": "+dt.format('MMM Do'));
                           var weather_html = "";
-                          if (i == 1){
-                              var current_date_2 = moment(date.format('MMM D YYYY'), 'MMM D YYYY');
+                          if (dt.format("YYYY-MM-DD") == moment().format("YYYY-MM-DD")){
+                              var current_date_2 = moment(dt.format('MMM D YYYY'), 'MMM D YYYY');
                               console.log("current date_2: " + current_date_2.format("YYYY-MM-DD"));
                                       var weather_html = "";
-                                      console.log(response);
-                                      if (response.weather.main == "Snow"){
+                                      console.log(response.weather);
+                                      if (response.weather["0"].main == "Snow"){
                                           weather = "Snow";
                                           weather_html = "<i class = 'fas fa-snowflake' style = 'font-size:36px;color:lightblue'></i>";
                                       }
-                                      else if (response.weather.main == "Rain"){
+                                      else if (response.weather["0"].main == "Rain" || response.weather["0"].main == "Mist"){
                                           weather = "Rain";
                                           weather_html = "<i class = 'fas fa-cloud-rain' style = 'font-size:36px;color:lightblue'></i>";
                                       }
-                                      else if (response.weather.main == "Clouds"){
+                                      else if (response.weather["0"].main == "Clouds"){
                                           weather = "Clouds";
                                           weather_html = "<i class = 'fas fa-cloud' style = 'font-size:36px;color:lightblue'></i>";
                                       }
@@ -372,12 +385,14 @@ $(document).ready(function(){
                       
                                       }
                                       sessionStorage.setItem("weather", weather);
-                                      console.log("day 1 is: " + current_date_2.format("YYYY-MM-DD"));
-                                      $("#day-1-date").html("<span class = 'day-display'>"+current_date_2.format('dddd')+"</span><br>"+weather_html+"<br> <span class = 'date-display'>"+current_date_2.format('D')+"</span>");
-                                      $("#day-1-date").css("background-color", "#007bff");
-                                      $("#day-1-date").css("border-radius", "none !important");
-                                      $("#day-1-date > .day-display").css("color", "white");
-                                      $("#day-1-date > .date-display").css("color", "white");
+                                      if (i == 1){
+                                        console.log("day 1 is: " + current_date_2.format("YYYY-MM-DD"));
+                                        $("#day-1-date").html("<span class = 'day-display'>"+current_date_2.format('dddd')+"</span><br>"+weather_html+"<br> <span class = 'date-display'>"+current_date_2.format('D')+"</span>");
+                                        $("#day-1-date").css("background-color", "#007bff");
+                                        $("#day-1-date").css("border-radius", "none !important");
+                                        $("#day-1-date > .day-display").css("color", "white");
+                                        $("#day-1-date > .date-display").css("color", "white");
+                                      }
                           }
                           else if (dt >= moment() && dt <= moment().add(5, 'days')){
                               weather_data.forEach(function(value){
@@ -385,7 +400,7 @@ $(document).ready(function(){
                                       if (value.weather["0"].main == "Snow"){
                                           weather_html = "<i class = 'fas fa-snowflake' style = 'font-size:36px;color:lightblue'></i>";
                                       }
-                                      else if (value.weather["0"].main == "Rain"){
+                                      else if (value.weather["0"].main == "Rain" || value.weather["0"].main == "Mist"){
                                           console.log(dt.format('MMM Do') + " rain");
                                           weather_html = "<i class = 'fas fa-cloud-rain' style = 'font-size:36px;color:lightblue'></i>";
                                       }
@@ -401,7 +416,7 @@ $(document).ready(function(){
                                       if (value.weather["0"].main == "Snow"){
                                           weather_html = "<i class = 'fas fa-snowflake' style = 'font-size:36px;color:lightblue'></i>";
                                       }
-                                      else if (value.weather["0"].main == "Rain"){
+                                      else if (value.weather["0"].main == "Rain" || value.weather["0"].main == "Mist"){
                                           console.log(dt.format('MMM Do') + " rain");
                                           weather_html = "<i class = 'fas fa-cloud-rain' style = 'font-size:36px;color:lightblue'></i>";
                                       }
@@ -488,6 +503,18 @@ $(document).ready(function(){
                           $("#day-1-date").css("color", "white");
                       }
 
+                      $(".date-jump-submit").on("click", function(event){
+                        event.preventDefault();
+                        if (moment($("#date-jump-text").val(), "YYYY-MM-DD").isValid()){
+                            load_calendar(moment($("#date-jump-text").val(), "YYYY-MM-DD"), sessionStorage.getItem("uid"));
+                            database.ref(sessionStorage.getItem("uid")).update({
+                                last_login: moment().format("YYYY-MM-DD hh:mm a")
+                            });
+                        }
+                        else{
+                            console.log("No");
+                        }
+                    });
               });
 
           });
@@ -610,7 +637,9 @@ $(document).ready(function(){
     });
   });
 
-  var someID = ''
+
+
+  var someID = '';
   $(document).on("click", ".event-cell", function(){
             // Adds the calendar time selection to the start time input on event form
             $("#event-start-time").val($(this).val());//puts start time in event modal relative to cell selected
