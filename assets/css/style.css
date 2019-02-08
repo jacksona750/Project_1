@@ -15,6 +15,13 @@
     border-style: transparent !important;
 }
 
+/* .calendar-container{
+    max-width: 1112px !important;
+    margin-right: 0 !important;
+    margin-left: 0 !important;
+    padding: 0 !important;
+} */
+
 
 .option{
     font-size: 40px;
@@ -75,11 +82,11 @@ td, th{
     border-top: none !important;
     border-bottom: none !important;
     height: 116px !important;
-    min-width: 139px !important;
+    min-width: 116px !important;
 }
 
 #day-0-date, #day-1-date, #day-2-date, #day-3-date, #day-4-date, #day-5-date, #day-6-date, #day-7-date{
-    min-width: 139px !important;
+    min-width: 116px !important;
 }
 
 #day-7-date{
@@ -102,20 +109,47 @@ th{
     /* text-align: right !important; */
 }
 
-caption{
+#month-caption{
     caption-side: top !important;
     font-size: 40px;
     color: #007bff !important;
     font-weight: 900;
+    text-align: left;
+    position: sticky !important;
+    /* float: left; */
+    left: 0;
+    /* clear: both; */
+    display: inline;
 }
 
 .nav-events{
-    background-color: transparent !important;
+    background-color: rgb(0, 123, 255, 0.2)!important;
     font-size: 20px !important;
+    position: sticky !important;
+    top: 0;
+}
+
+.date-jump-submit{
+    background-color: rgb(0, 123, 255)!important;
+    font-size: 20px;
+    color: white;
+    border: none !important;
+    border-radius: 10px;
+    margin-left: 5px;
+    vertical-align: middle;
+}
+
+#date-jump-text{
+    vertical-align: middle;
+    font-size: 20px;
+    width: 150px;
+    height: 40px;
 }
 
 .nav-event, nav li{
     color: white !important;
+    font-weight: bold !important;
+    opacity: 1 !important;
     background-color: none;
 }
 
@@ -127,13 +161,11 @@ caption{
 }
 
 .event-cell:hover{
-    border-style: solid !important;
-    border-width: 5px !important;
-    border-color: white !important;
+    cursor: pointer;
 }
 
 table{
-    width: 1112px !important;
+    width: 928px !important;
 }
 
 table thead tr{
@@ -163,9 +195,60 @@ table  tbody{
     text-overflow: ellipsis;
 }
 
+#date-jump{
+    float: right;
+    position: sticky;
+    right: 0;
+    vertical-align: middle !important;
+    max-width: 100%;
+    clear: both;
+
+}
+
+caption{
+    caption-side: top !important;
+}
+
+.credit{
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    font-size: 7px;
+    text-align: right;
+}
+
+.credit a{
+    font-size: 1px !important;
+}
+
 @media screen and (min-width: 992px){
     .right{
         position: absolute;
         right: 0 !important;
     }
+}
+
+@media screen and (max-width: 992px){
+    #month-caption{
+        float: left;
+        clear: both;
+    }
+    td,th,#day-0-date, #day-1-date, #day-2-date, #day-3-date, #day-4-date, #day-5-date, #day-6-date, #day-7-date{
+        min-width: 200px !important;
+    }
+  
+}
+
+@media screen and (max-width: 549px){
+    #month-caption{
+        float: left;
+        clear: both;
+        font-size: 32px;
+    }
+    td,th,#day-0-date, #day-1-date, #day-2-date, #day-3-date, #day-4-date, #day-5-date, #day-6-date, #day-7-date{
+        min-width: 125px !important;
+    
+    }
+
+  
 }

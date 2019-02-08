@@ -5,27 +5,22 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Calendar App</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">    <link rel="stylesheet" type="text/css" media="screen" href="assets/css/style.css" />
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://rawgit.com/moment/moment/2.2.1/min/moment.min.js"></script>
     <script type = "text/javascript" src="assets/javascript/app.js"></script>
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/md5.js"></script>
-    <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/pbkdf2.js"></script>
     <script src="https://www.gstatic.com/firebasejs/5.8.2/firebase.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.7.0/css/all.css' integrity='sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ' crossorigin='anonymous'>
 
 
 
 </head>
 <body>
-    <video autoplay muted loop id="myVideo">
-        <source src="assets/images/storm_raindrops_on_window.mp4" type="video/mp4">
-        Your browser does not support HTML5 video.
+    <video autoplay muted loop id="myVideo" src = "assets/images/storm_raindrops_on_window.mp4" type="video/mp4">
+        <!-- <source src="assets/images/storm_raindrops_on_window.mp4" type="video/mp4"> -->
     </video>
     <!-- <div class="jumbotron">
         <h1 class="display-4">Hello, world!</h1>
@@ -33,25 +28,29 @@
         <hr class="my-4">
         <p>It uses utility classes for typography and spacing to space content out within the larger container.</p>
     </div> -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary nav-events">
+</div>
+    <nav class="navbar navbar-expand-lg navbar-dark nav-events">
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarText">
             <ul class="navbar-nav mr-auto">
             <li class="nav-item active nav-event">
-                <a class="nav-link" href="#"><h1>Charlie's Calendar</h1><span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="index.html"><h1 id = "name-calendar"></h1><span class="sr-only">(current)</span></a>
             </li>
             </ul>
             <ul class="navbar-nav mr-auto right">
             <li class="nav-item nav-event nav-text">
-                <a class="nav-link" href="#" data-toggle="modal" data-target="#event-modal">Add an event</a>
+                <a class="nav-link" href="#" data-toggle="modal" data-target="#event-modal" id = "add-event-nav">Add an event</a>
             </li>
             <li class="nav-item nav-event">
                 <a class="nav-link" href="#" data-toggle="modal" data-target="#movie-modal">Add a movie</a>
             </li>
             <li class="nav-item nav-event">
                 <a class="nav-link" href="#" data-toggle="modal" data-target="#restaurant-modal">Add a restaurant</a>
+            </li>
+            <li class="nav-item nav-event">
+                <a class="nav-link" id = "sign-out">Sign Out</div>
             </li>
             </ul>
         </div>
@@ -69,7 +68,7 @@
         </div>
         <div class = "row mt-5 mb-5 justify-content-center">
             <div class = "col-md-12">
-                    <form>
+                    <form id = "form-sign-form">
                         <div class = "form-row">
                             <div class = "form-group col-md-3 offset-md-8">
                                 <span class = "required">*</span>Required
@@ -80,7 +79,7 @@
                                 <div class="form-row mt-2 exclusive">
                                     <div class="form-group col-md-12">
                                     <label for="inputName">Name<span class = "required">*</span></label>
-                                    <input type="email" class="form-control" id="inputName" placeholder="John Smith">
+                                    <input type="text" class="form-control" id="inputName" placeholder="John Smith">
                                     </div>
                                 </div>
                                 <div class="form-row mt-2">
@@ -116,12 +115,12 @@
                                 <div class = "form-row mt-2 exclusive">
                                     <div class="form-group col-md-12">
                                         <label for="inputState">State<span class = "required">*</span></label>
-                                        <input type="text" class="form-control" id="State" placeholder="CA">
+                                        <input type="text" class="form-control" id="inputState" placeholder="CA">
                                     </div>
                                 </div>                                
                                 <div class = "form-row mt-2 exclusive">
                                     <div class="form-group col-md-12">
-                                        <label for="inputZip">Zip</label>
+                                        <label for="inputZip">Zip<span class = "required">*</span></label>
                                         <input type="text" class="form-control" id="inputZip" placeholder="90210">                                    
                                     </div>
                                 </div>
@@ -158,7 +157,11 @@
                     <div class="form-group row">
                         <label for="inputStart" class="col-sm-3 col-form-label">Event Date</label>
                         <div class="col-sm-9">
+<<<<<<< HEAD
                         <input type="Text" class="form-control" id="event-start-date">
+=======
+                        <input type="text" class="form-control" id="event-start-date" placeholder="2019-01-01">
+>>>>>>> 8ea404655ce3685597563c31df65042ee0d11116
                         </div>
                     </div>
                     <div class="form-group row">
@@ -186,25 +189,41 @@
                         <div class="form-group row">
                             <label for="inputAddress" class="col-sm-4 col-form-label text-right">Address</label>
                             <div class="col-sm-8">
+<<<<<<< HEAD
                             <input type="text" class="form-control" id="event-street" placeholder="1234 Main St">
+=======
+                            <input type="text" class="form-control" id="event_loc_inputAddress" placeholder="1234 Main St">
+>>>>>>> 8ea404655ce3685597563c31df65042ee0d11116
                             </div>
                         </div>
                             <div class="form-group row">
                             <label for="inputCity" class="col-sm-4 col-form-label text-right">City<span class="required">*</span></label>
                             <div class="col-sm-8">
+<<<<<<< HEAD
                             <input type="text" class="form-control" id="event-city" placeholder="Los Angeles"> 
+=======
+                            <input type="text" class="form-control" id="event_loc_inputCity" placeholder="Los Angeles"> 
+>>>>>>> 8ea404655ce3685597563c31df65042ee0d11116
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="inputState" class="col-sm-4 col-form-label text-right">State<span class = "required">*</span></label>
                             <div class="col-sm-8">
+<<<<<<< HEAD
                             <input type="text" class="form-control" id="event-state" placeholder="CA">
+=======
+                            <input type="text" class="form-control" id="event_loc_inputState" placeholder="CA">
+>>>>>>> 8ea404655ce3685597563c31df65042ee0d11116
                             </div>
                         </div>                                
                         <div class="form-group row">
                             <label for="inputZip" class="col-sm-4 col-form-label text-right">Zip</label>
                             <div class="col-sm-8">
+<<<<<<< HEAD
                             <input type="text" class="form-control" id="event-zip" placeholder="90210">                                    
+=======
+                            <input type="text" class="form-control" id="event_loc_inputZip" placeholder="90210">                                    
+>>>>>>> 8ea404655ce3685597563c31df65042ee0d11116
                             </div>
                         </div>
                     </div>    
@@ -221,32 +240,48 @@
                         <div class="form-group row">
                             <label for="inputAddress" class="col-sm-4 col-form-label text-right">Address</label>
                             <div class="col-sm-8">
+<<<<<<< HEAD
                             <input type="text" class="form-control" id="origin-street" placeholder="1234 Main St">
+=======
+                            <input type="text" class="form-control" id="event_origin_inputAddress" placeholder="1234 Main St">
+>>>>>>> 8ea404655ce3685597563c31df65042ee0d11116
                             </div>
                         </div>
                             <div class="form-group row">
                             <label for="inputCity" class="col-sm-4 col-form-label text-right">City<span class="required">*</span></label>
                             <div class="col-sm-8">
+<<<<<<< HEAD
                             <input type="text" class="form-control" id="origin-city" placeholder="Los Angeles"> 
+=======
+                            <input type="text" class="form-control" id="event_origin_inputCity" placeholder="Los Angeles"> 
+>>>>>>> 8ea404655ce3685597563c31df65042ee0d11116
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="inputState" class="col-sm-4 col-form-label text-right">State<span class = "required">*</span></label>
                             <div class="col-sm-8">
+<<<<<<< HEAD
                             <input type="text" class="form-control" id="origin-state" placeholder="CA">
+=======
+                            <input type="text" class="form-control" id="event_origin_inputState" placeholder="CA">
+>>>>>>> 8ea404655ce3685597563c31df65042ee0d11116
                             </div>
                         </div>                                
                         <div class="form-group row">
                             <label for="inputZip" class="col-sm-4 col-form-label text-right">Zip</label>
                             <div class="col-sm-8">
+<<<<<<< HEAD
                             <input type="text" class="form-control" id="origin-zip" placeholder="90210">                                    
+=======
+                            <input type="text" class="form-control" id="event_origin_inputZip" placeholder="90210">                                    
+>>>>>>> 8ea404655ce3685597563c31df65042ee0d11116
                             </div>
                         </div>
                     </div>    
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" id="event-submit" data-dismiss="modal">Save changes</button>
+                <button type="submit" class="btn btn-primary" id="event-submit" data-dismiss="modal">Submit</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
         </div>
@@ -366,19 +401,20 @@
 </div>
 </div>
 
-    <div class = "container calendar-container mt-2">
+    <div class = "container calendar-container mt-2 mb-5">
         <div class = "table-responsive">
             <table class="table table-dark calendar">
+                <caption><form><div id = "month-caption"></div><div id = "date-jump"><input type = "text" id = "date-jump-text"><button type = "submit" class = "date-jump-submit" >Go</button></div></form></caption>          
                 <thead>
                     <tr class = "dates">
-                    <th scope="col" id = "day-0-date"></th>
-                    <th scope="col" id = "day-1-date"></th>
-                    <th scope="col" id = "day-2-date"></th>
-                    <th scope="col" id = "day-3-date"></th>
-                    <th scope="col" id = "day-4-date"></th>
-                    <th scope="col" id = "day-5-date"></th>
-                    <th scope="col" id = "day-6-date"></th>
-                    <th scope="col" id = "day-7-date"></th>
+                    <th scope="col" id = "day-0-date" data-date = "date"></th>
+                    <th scope="col" id = "day-1-date" data-date = "date"></th>
+                    <th scope="col" id = "day-2-date" data-date = "date"></th>
+                    <th scope="col" id = "day-3-date" data-date = "date"></th>
+                    <th scope="col" id = "day-4-date" data-date = "date"></th>
+                    <th scope="col" id = "day-5-date" data-date = "date"></th>
+                    <th scope="col" id = "day-6-date" data-date = "date"></th>
+                    <th scope="col" id = "day-7-date" data-date = "date"></th>
                     </tr>
                 </thead>
                 <tbody id = "scroll-body">
@@ -386,5 +422,28 @@
             </table>
         </div>
     </div>
+    <div class = "row">
+        <div class = "col-md-3 offset-md-9 creidt">
+            <p><a href="http://www.videezy.com">Free Stock Footage by Videezy</a></p>
+        </div>
+    </div>
+    <div class="modal" id = "myModal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" id = "myModal" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        <h5 class="modal-title">Error</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        </div>
+                        <div class="modal-body" id = "error-body">
+                        <p></p>
+                        </div>
+                        <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 </body>
 </html>
