@@ -1,71 +1,77 @@
-// // Selectors
-// // var email = $("#inputEmail").val().trim();
-// // var password = $("#inputPassword").val().trim();
-// // var confPassword = $("#inputConfirmPassword").val().trim();
-// // var address = $("#inputAddress").val().trim();
-// // var city = $("#inputCity").val().trim();
-// // var state = $("#inputState").val().trim();
-// // var zip = $("#inputZip").val().trim();
 
-// // The values below will be pulled from our location query
-// var originLat = "34.02517";
-// var originLong = "-118.47488";
-// var destLat = "34.06877";
-// var destLong = "-118.44896";
+// The values below will be pulled from our location query
 
 
-// var address = "2029 olympic blvd santa monica, ca 90404"
 
-// // This is our API key. Add your own API key between the ""
-// var weatherAPI = "265a46d65db9c9a8b164aa9180136f67";
-// var mapsAPI = "OEeXUFJsMGPGX6jvueAh5pJ2YyUCzbay";
-// var restAPI = "DOF99u8HLWYBY7XS57PcCuQ6aJdh0eWYQVSSRXCj3oWg-OPD8t6QIKTHMkbL-uuJhmVNE-by-DG2tz7bQndWFBjgc_-AF1wbFUD2tLDFQNVrUmAsEHRnJVzA_gZZXHYx";
-// var cityName = "burbank";
 
-// // Here we are building the URL we need to query the weather database
-// var weatherQuery = "https://api.openweathermap.org/data/2.5/forecast?q=" + cityName + ",us&appid=" + weatherAPI;
+var weatherAPI = "265a46d65db9c9a8b164aa9180136f67";
+var mapsAPI = "OEeXUFJsMGPGX6jvueAh5pJ2YyUCzbay";
+var restAPI = "DOF99u8HLWYBY7XS57PcCuQ6aJdh0eWYQVSSRXCj3oWg-OPD8t6QIKTHMkbL-uuJhmVNE-by-DG2tz7bQndWFBjgc_-AF1wbFUD2tLDFQNVrUmAsEHRnJVzA_gZZXHYx";
 
-// // AJAX call for weather
-// $.ajax({
-//   url: weatherQuery,
-//   method: "GET"
-// }).then(function(response) {
 
-//   // Create CODE HERE to Log the weatherQuery
-//   console.log(weatherQuery)
-//   // Create CODE HERE to log the resulting object
-//   console.log(response)
-// })
+var eventStreet ;
+var eventCity ;
+var eventState ;
+var eventZip ;
+var originStreet;
+var originCity;
+var originState;
+var originZip;
+var originLat = "34.00417";
+var originLon = "-118.48177";
+var eventLat = "34.0252";
+var eventLon = "-118.47479";
+var eventAddress = "2029 olympic blvd santa monica ca 90404";              
+var originAddress = "1358 4th st santa monica ca 90401";
+// var originAddress = originStreet + originCity + originState + originZip;
+// console.log(originAddress)
+// var eventAddress = eventStreet + eventCity + eventState + eventZip;
+// console.log(eventAddress)
 
-// // Buidling the URL to query the TomTom map search database
-// var locationQuery = "https://api.tomtom.com/search/2/geocode/" + address + ".JSON?countrySet=us&key=" + mapsAPI;
 
-// // AJAX call for location
-// $.ajax({
-//     url: locationQuery,
-//     method: "GET"
-//   }).then(function(response) {
-  
-//     // Create CODE HERE to Log the locationQuery
-//     console.log(locationQuery)
-//     // Create CODE HERE to log the resulting object
-//     console.log(response)
-//   })
 
-// // Buidling the URL to query the TomTom database for route duration
-// var durationQuery = "https://api.tomtom.com/routing/1/calculateRoute/" + originLat + "," + originLong + ":" + destLat + "," + destLong +"/json?&key=" + mapsAPI;
+  // URL to query the TomTom map search database
+  var eventQuery = "https://api.tomtom.com/search/2/geocode/" + eventAddress + ".json?countrySet=us&key=OEeXUFJsMGPGX6jvueAh5pJ2YyUCzbay";
 
-// // AJAX call for location
-// $.ajax({
-//     url: durationQuery,
-//     method: "GET"
-//   }).then(function(response) {
-  
-//     // Create CODE HERE to Log the locationQuery
-//     console.log(durationQuery)
-//     // Create CODE HERE to log the resulting object
-//     console.log(response)
-//   })
+  // AJAX call for location
+  $.ajax({
+      url: eventQuery,
+      method: "GET"
+  }).then(function(response) {
+      console.log(response)
+      var data = response.results;
+      eventLat = data[0].position.lat;
+      eventLon = data[0].position.lon; 
+      console.log(eventLat)
+      console.log(eventLon)
+      var originQuery = "https://api.tomtom.com/search/2/geocode/" + originAddress + ".json?countrySet=us&key=OEeXUFJsMGPGX6jvueAh5pJ2YyUCzbay";
+      
+      $.ajax({
+      url: originQuery,
+      method: "GET"
+    }).then(function(response) {
+        console.log(response)
+      var data = response.results;
+      originLat = data[0].position.lat;
+      originLon = data[0].position.lon; 
+      console.log(originLat)
+      console.log(originLon)
+      
+      var durationQuery = "https://api.tomtom.com/routing/1/calculateRoute/" + originLat + "," + originLon + ":" + eventLat + "," + eventLon +"/json?&key=OEeXUFJsMGPGX6jvueAh5pJ2YyUCzbay";
+      
+      // AJAX call for duration
+      $.ajax({
+          url: durationQuery,
+          method: "GET"
+        }).then(function(response) {
+            
+            // Create CODE HERE to log the resulting object
+            var duration = response.routes[0].summary.travelTimeInSeconds;
+            console.log(response)
+            console.log(response.routes[0].summary.travelTimeInSeconds)
+        })
+    })
+})
 
 // // Buidling the URL to query the TomTom database for route duration
 // var restaurantQuery = "https://api.yelp.com/v3/businesses/search" + "/json?&key=" + mapsAPI;
@@ -85,15 +91,22 @@
 
 $(document).ready(function(){
       // Initialize Firebase
+    // var config = {
+    //     apiKey: "AIzaSyCxFLkeQbYJRU5z5b2nOBCIgz3-XeJpA_4",
+    //     authDomain: "calendar-app-47185.firebaseapp.com",
+    //     databaseURL: "https://calendar-app-47185.firebaseio.com",
+    //     projectId: "calendar-app-47185",
+    //     storageBucket: "calendar-app-47185.appspot.com",
+    //     messagingSenderId: "753398671721"
+    // };
     var config = {
-        apiKey: "AIzaSyCxFLkeQbYJRU5z5b2nOBCIgz3-XeJpA_4",
-        authDomain: "calendar-app-47185.firebaseapp.com",
-        databaseURL: "https://calendar-app-47185.firebaseio.com",
-        projectId: "calendar-app-47185",
-        storageBucket: "calendar-app-47185.appspot.com",
-        messagingSenderId: "753398671721"
-    };
-
+        apiKey: "AIzaSyDOFuIjeIWlGBNnWw-0RH6jjsZ_OykRQSQ",
+        authDomain: "ucla-example-99639.firebaseapp.com",
+        databaseURL: "https://ucla-example-99639.firebaseio.com",
+        projectId: "ucla-example-99639",
+        storageBucket: "ucla-example-99639.appspot.com",
+        messagingSenderId: "734061672266"
+      };
     firebase.initializeApp(config);
 
     var database = firebase.database();
@@ -188,6 +201,7 @@ $(document).ready(function(){
             url: queryURL,
             method: "GET"
         }).then(function(response){
+            console.log(response)
             if ((zip.length == 5) && (response.postalCodes.length > 0)){
                 return true;
             }
@@ -289,8 +303,8 @@ $(document).ready(function(){
                     cell.css("border-right" ,"solid 1px lightgrey");
                 }
                 cell.attr("data-datetime", $("#day-"+day+"-date").attr("data-date")+ " " + time.format("h:mm a"));
-                cell.val(time.format("HH:mm"))
-                cell.attr("data-toggle", "modal");
+                cell.val(time.format("HH:mm"));
+                cell.attr("data-toggle", "modal");//create modal for cell selected
                 cell.attr("data-target", "#event-modal");
                 cell.addClass("event-cell");
                 row.append(cell);
@@ -336,12 +350,16 @@ $(document).ready(function(){
 
         $(".submit-btn").text("Sign Up");
     });
-    
+  
+    var someID = ''
     $(document).on("click", ".event-cell", function(){
       // Adds the calendar time selection to the start time input on event form
-      $("#event-start-time").val($(this).val());
-        $(this).css("background", "linear-gradient(to bottom, #212529 0%,#212529 50%,#212529 50%,#007bff 50%,#007bff 100%)");
+      $("#event-start-time").val($(this).val());//puts start time in event modal relative to cell selected
+      $("#event-end-time").val(moment($(this).val(), "HH:mm").add(1, 'hours').format("HH:mm"));        $(this).css("background", "linear-gradient(to bottom, #212529 0%,#212529 50%,#212529 50%,#007bff 50%,#007bff 100%)");
+      $("#event-start-date").val($(this).attr("data-datetime").split(" ")[0]);
+        someID = $(this).attr("data-datetime").split(' ').join('');
         var span = $("<div>");
+        span.attr('id', someID)
         span.css("position", "absolute");
         span.css("height", "50%");
         span.css("width", "100%");
@@ -352,39 +370,90 @@ $(document).ready(function(){
         span.css("display", "block");
         span.css("white-space", "nowrap");
         $(this).append(span);  
-        // Adds event title to calendar  
-        $("#event-submit").on("click", function(e){
-          e.preventDefault();
-          var eventTitle = $("#event-title").val();
-          $(span).text(eventTitle);
+            // Function to show event address input on event form
+            $("#event-address").hide();
+            $("#event-location").change(function(){
+                if ($("#event-location").val() == "add-location") {
+                $("#event-address").show();
+                } else {
+                $("#event-address").hide();
+                }
+            });
+            
+            // Function to show starting address input on event form
+            $("#start-address").hide();
+            $("#start-location").change(function(){
+                if ($("#start-location").val() == "add-location") {
+                $("#start-address").show();
+                } else {
+                $("#start-address").hide();
+                }
+            });
 
-      })
-  
     })
-    
-    // Function to show event address input on event form
-    $(function(showNavEnd){
-      $("#event-address").hide();
-      $("#event-location").change(function(){
-        if ($("#event-location").val() == "add-location") {
-          $("#event-address").show();
-        } else {
-          $("#event-address").hide();
-          }
-      });
-    });
+
+
+            $("#event-submit").on("click", function(e){
+              e.preventDefault();
+              var eventTitle = $("#event-title").val();
+              eventStreet = $("#event-street").val().trim();
+              eventCity = $("#event-city").val().trim();
+              eventState = $("#event-state").val().trim();
+              eventZip = $("#event-zip").val().trim();
+              function location_verification(eventZip){
+                queryURL = "http://api.geonames.org/postalCodeSearchJSON?postalcode=" + eventZip + "&maxRows=10&username=charles.glass";
+                $.ajax({
+                    url: queryURL,
+                    method: "GET"
+                }).then(function(response){
+                    console.log(response)
+                    if ((eventZip.length == 5) && (response.postalCodes.length > 0)){
+                        return true;
+                    }
+                    else{
+                        return false;
+                    }
+                });
+              }
+        
+              
+              originStreet = $("#origin-street").val().trim();
+              originCity = $("#origin-city").val().trim();
+              originState = $("#origin-state").val().trim();
+              originZip = $("#origin-zip").val().trim();
+              function location_verification(originZip){
+                queryURL = "http://api.geonames.org/postalCodeSearchJSON?postalcode=" + originZip + "&maxRows=10&username=charles.glass";
+                $.ajax({
+                    url: queryURL,
+                    method: "GET"
+                }).then(function(response){
+                    console.log(response)
+                    if ((originZip.length == 5) && (response.postalCodes.length > 0)){
+                        return true;
+                    }
+                    else{
+                        return false;
+                    }
+                });
+            }
+        
+              var whatwewant = document.getElementById(someID);
+              whatwewant.innerHTML = eventTitle;
+              $("#event-title").val("");
+              $("#event-street").val("");
+              $("#event-city").val("");
+              $("#event-state").val("");
+              $("#event-zip").val("");
+              $("#origin-street").val("");
+              $("#origin-city").val("");
+              $("#origin-state").val("");
+              $("#origin-zip").val("");
+              $("#event-address").hide();
+              $("#start-address").hide();
+
+              
+            })
+     
       
-    // Function to show starting address input on event form
-    $(function(showNavStart){
-      $("#start-address").hide();
-      $("#start-location").change(function(){
-        if ($("#start-location").val() == "add-location") {
-          $("#start-address").show();
-        } else {
-          $("#start-address").hide();
-          }
-      });
-    });
-
-
+    
 });
