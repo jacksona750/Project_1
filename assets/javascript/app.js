@@ -468,6 +468,7 @@ $(document).ready(function(){
                         $(".sign-in").hide();
                         $(".calendar-container").show();
                         $(".nav-events").show();
+                        $(".credit").show();
                 
                         $("#myVideo").show();
                         $("tbody").html("");
@@ -639,6 +640,7 @@ $(document).ready(function(){
                                 title_div.css("left", "0");
                                 title_div.css("display", "block");
                                 title_div.css("white-space", "nowrap");
+                                title_div.css("border-radius", "15px");
                                 title_div.attr("data-title", events[i].event_title);
                                 title_div.attr("data-startdate", events[i].start_date);
                                 title_div.attr("data-starttime", events[i].start_time);
@@ -673,6 +675,7 @@ $(document).ready(function(){
                                 title_div.css("left", "0");
                                 title_div.css("display", "block");
                                 title_div.css("white-space", "nowrap");
+                                title_div.css("border-radius", "15px");
                                 title_div.attr("data-title", events[i].event_title);
                                 title_div.attr("data-startdate", events[i].start_date);
                                 title_div.attr("data-starttime", events[i].start_time);
@@ -701,6 +704,7 @@ $(document).ready(function(){
                                 title_div.css("left", "0");
                                 title_div.css("display", "block");
                                 title_div.css("white-space", "nowrap");
+                                title_div.css("border-radius", "15px");
                                 title_div.attr("data-title", events[i].event_title);
                                 title_div.attr("data-startdate", events[i].start_date);
                                 title_div.attr("data-starttime", events[i].start_time);
@@ -743,6 +747,7 @@ $(document).ready(function(){
                                     title_div.css("left", "0");
                                     title_div.css("display", "block");
                                     title_div.css("white-space", "nowrap");
+                                    title_div.css("border-radius", "15px");
                                     title_div.attr("data-title", events[i].event_title);
                                     title_div.attr("data-startdate", events[i].start_date);
                                     title_div.attr("data-starttime", events[i].start_time);
@@ -770,6 +775,7 @@ $(document).ready(function(){
                                     title_div.css("left", "0");
                                     title_div.css("display", "block");
                                     title_div.css("white-space", "nowrap");
+                                    title_div.css("border-radius", "15px");
                                     title_div.attr("data-title", events[i].event_title);
                                     title_div.attr("data-startdate", events[i].start_date);
                                     title_div.attr("data-starttime", events[i].start_time);
@@ -842,6 +848,7 @@ $(document).ready(function(){
     $("#myVideo").hide();
     $(".calendar-container").hide();
     $(".nav-events").hide();
+    $(".credit").hide();
 
 
     $("#event-address").hide();

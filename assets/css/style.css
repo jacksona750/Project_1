@@ -209,6 +209,18 @@ caption{
     caption-side: top !important;
 }
 
+.credit{
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    font-size: 7px;
+    text-align: right;
+}
+
+.credit a{
+    font-size: 1px !important;
+}
+
 @media screen and (min-width: 992px){
     .right{
         position: absolute;
