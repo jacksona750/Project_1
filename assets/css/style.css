@@ -15,6 +15,13 @@
     border-style: transparent !important;
 }
 
+/* .calendar-container{
+    max-width: 1112px !important;
+    margin-right: 0 !important;
+    margin-left: 0 !important;
+    padding: 0 !important;
+} */
+
 
 .option{
     font-size: 40px;
@@ -75,11 +82,11 @@ td, th{
     border-top: none !important;
     border-bottom: none !important;
     height: 116px !important;
-    min-width: 139px !important;
+    min-width: 116px !important;
 }
 
 #day-0-date, #day-1-date, #day-2-date, #day-3-date, #day-4-date, #day-5-date, #day-6-date, #day-7-date{
-    min-width: 139px !important;
+    min-width: 116px !important;
 }
 
 #day-7-date{
@@ -160,7 +167,7 @@ th{
 }
 
 table{
-    width: 1112px !important;
+    width: 928px !important;
 }
 
 table thead tr{

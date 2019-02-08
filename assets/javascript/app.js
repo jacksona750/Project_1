@@ -126,7 +126,7 @@ $(document).ready(function(){
           var errorCode = error.code;
           var errorMessage = error.message;
           // ...
-          $(".modal-body").text(errorMessage);
+          $("#error-body").text(errorMessage);
           $("#myModal").modal('show');
           $("#myModal").modal('show');
           
@@ -149,7 +149,7 @@ $(document).ready(function(){
           var errorCode = error.code;
           var errorMessage = error.message;
           // ...
-          $(".modal-body").text(errorMessage);
+          $("#error-body").text(errorMessage);
           $("#myModal").modal('show');
           $("#myModal").modal('show');
           
@@ -235,10 +235,10 @@ $(document).ready(function(){
           }
           else{
               console.log("There were errors");
-              $(".modal-body").html("");
-              $(".modal-body").append($("<div>").text("There are error(s) with your submission:"));
+              $("#error-body").html("");
+              $("#error-body").append($("<div>").text("There are error(s) with your submission:"));
               errors.forEach(function(value){
-                  $(".modal-body").append($("<div>").text(value));
+                  $("#error-body").append($("<div>").text(value));
               });
               $("#myModal").modal('show');
               
@@ -259,15 +259,115 @@ $(document).ready(function(){
       }
   }
 
-  function add_event(uid, title, start_date, end_date, time, start_loc, end_loc){
-      database.ref(uid+"/events").push({
+  function send_event_form(){
+      var errors = [];
+      console.log($("#event-title"));
+      var even_titl = $("#event-title").val().trim();
+      console.log(even_titl);
+      var str_field_origin_check = true;
+      var str_field_dest_check = true;
+      var zip_dest_check = true;
+      var zip_origin_check = true;
+      console.log($("#event-location").val().trim());
+      var location_setting_event = $("#event-location").val().trim();
+      if (location_setting_event != "default-location"){
+          zip_dest_check = location_verification($("#event_loc_inputZip").val().trim());
+          str_field_dest_check = city_state_name_verification($("#event_loc_inputCity").val().trim(), $("#event_loc_inputState").val().trim(), even_titl);
+
+      }
+
+      var location_setting_origin = $("#start-location").val().trim()
+      if (location_setting_origin != "default-location"){
+          zip_origin_check = location_verification($("#event_origin_inputZip").val().trim());
+          str_field_origin_check = city_state_name_verification($("#event_origin_inputCity").val().trim(), $("#event_origin_inputState").val().trim(), even_titl);
+      }
+
+      if (str_field_origin_check == false || str_field_dest_check == false){
+          console.log("str_error");
+          errors.push("Please fill in all required fields");
+      }
+
+      if (zip_dest_check == false || zip_origin_check == false){
+          errors.push("Please enter a valid Zip Code");
+      }
+
+      if (moment($("#event-start-date").val().trim(), "YYYY-MM-DD").isValid()){
+
+    }
+    else{
+        errors.push("Please enter a valid date");
+    }
+
+    if(moment($("#event-start-time").val().trim(), "HH:mm").isValid() && moment($("#event-end-time").val().trim(), "HH:mm").isValid() && moment($("#event-start-time").val().trim(), "HH:mm").format("HH:mm") <= moment($("#event-end-time").val().trim(), "HH:mm").format("HH:MM")){
+
+    }
+    else{
+        errors.push("Please enter valid times");
+    }
+
+    if (errors.length == 0){
+        var zip_event;
+        var zip_origin;
+
+        if ($("#event-location").val().trim() == "default-location"){
+            zip_event = sessionStorage.getItem("zip");
+        }
+        else{
+            zip_event = $("#event_loc_inputZip").val().trim();
+        }
+
+        if ($("#start-location").val().trim() == "default-location"){
+            zip_origin = sessionStorage.getItem("zip");
+        }
+        else{
+            zip_origin = $("#event_origin_inputZip").val().trim();
+        }
+        console.log(sessionStorage.getItem("uid"));
+        console.log(even_titl);
+        console.log(moment($("#event-start-time").val().trim(), "HH:mm").format("HH:mm"));
+        console.log(moment($("#event-end-time").val().trim(), "HH:mm").format("HH:mm"));
+        console.log(moment($("#event-start-date").val().trim(), "YYYY-MM-DD"));
+        console.log(zip_origin);
+        console.log(zip_event);
+        add_event(sessionStorage.getItem("uid"), even_titl, moment($("#event-start-time").val().trim(), "HH:mm").format("HH:mm"), moment($("#event-end-time").val().trim(), "HH:mm").format("HH:mm"), moment($("#event-start-date").val().trim(), "YYYY-MM-DD"), zip_origin, zip_event);
+    }
+    else{
+        $("#error-body").html("");
+        $("#error-body").append($("<div>").text("There are error(s) with your submission:"));
+        errors.forEach(function(value){
+            $("#error-body").append($("<div>").text(value));
+        });
+        $("#myModal").modal('show');
+
+    }
+
+    // $("#event_origin_inputCity").val("");
+    // $("#event_origin_inputState").val("");
+    // $("#event_origin_inputAddress").val("");
+    // $("#event_loc_inputCity").val("");
+    // $("#event_loc_inputState").val("");
+    // $("#event_loc_inputAddress").val("");
+    // $("#event_title").val("");   
+    // $("#event-start-date").val("");     
+    // $("#event-end-time").val("");
+    // $("#event-start-time").val("");     
+    // $("#event_origin_inputZip").val("");
+    // $("#event_loc_inputZip").val("");
+
+
+  }
+
+  function add_event(uid, title, start_time, end_time, start_date, start_loc, end_loc){
+      database.ref(uid+"/events/"+start_date.format("MMM")).push({
           event_title: title,
-          start_date: start_date,
-          end_date: end_date,
-          time: time,
+          start_date: start_date.format("YYYY-MM-DD"),
+          end_time: end_time,
+          start_time: start_time,
           start_loc: start_loc,
           end_loc: end_loc
       });
+
+      load_calendar(moment(), uid);
   }
 
   firebase.auth().onAuthStateChanged(function(user) {
@@ -314,281 +414,413 @@ $(document).ready(function(){
 
   function load_calendar(date, uid){
       database.ref(uid).once("value").then(function(snapshot){
-          console.log("working");
-        //   sessionStorage.clear();
-          sessionStorage.setItem("name", snapshot.val().name);
-          console.log("name in storage");
-          sessionStorage.setItem("zip", snapshot.val().zip);
-          var zip = sessionStorage.getItem("zip");
-          var weather_data;
-          var weather_api = "265a46d65db9c9a8b164aa9180136f67";
-          var weatherQuery = "https://api.openweathermap.org/data/2.5/forecast?zip="+sessionStorage.getItem("zip")+",us&appid="+weather_api;
-          
-          var weather = "";
-          $.ajax({
-              url: weatherQuery,
-              method: "GET"
-          }).then(function(response_main) {
-              var weather_api = "265a46d65db9c9a8b164aa9180136f67";
-              var weatherQuery = "https://api.openweathermap.org/data/2.5/weather?zip="+zip+",us&appid="+weather_api;
-              $.ajax({
-                  url: weatherQuery,
-                  method: "GET"
-                }).then(function(response) {
-                    $("#month-caption").text("");
-                      $("#month-caption").prepend(date.format('MMMM YYYY'));
+          database.ref(uid+"/events/"+date.format("MMM")).once("value").then(function(snapshot_event){
+            console.log(uid+"/events/"+date.format("MMM"));
+            console.log(snapshot_event);
+            console.log("working");
+            var events = [];
+            snapshot_event.forEach(function(value){
+                console.log(value);
+                console.log(value.val().event_title);
+                console.log(value.val().start_date);
+                console.log(value.val().start_time);
+                console.log(value.val().end_time);
+                console.log(value.val().start_loc);
+                console.log(value.val().end_loc);
+                events.push({
+                    event_title: value.val().event_title,
+                    start_date: value.val().start_date,
+                    end_time: value.val().end_time,
+                    start_time: value.val().start_time,
+                    start_loc: value.val().start_loc,
+                    end_loc: value.val().end_loc
+                });
+            });
+            //   sessionStorage.clear();
+            sessionStorage.setItem("name", snapshot.val().name);
+            console.log("name in storage");
+            sessionStorage.setItem("zip", snapshot.val().zip);
+            var zip = sessionStorage.getItem("zip");
+            var weather_data;
+            var weather_api = "265a46d65db9c9a8b164aa9180136f67";
+            var weatherQuery = "https://api.openweathermap.org/data/2.5/forecast?zip="+sessionStorage.getItem("zip")+",us&appid="+weather_api;
+            
+            var weather = "";
+            $.ajax({
+                url: weatherQuery,
+                method: "GET"
+            }).then(function(response_main) {
+                var weather_api = "265a46d65db9c9a8b164aa9180136f67";
+                var weatherQuery = "https://api.openweathermap.org/data/2.5/weather?zip="+zip+",us&appid="+weather_api;
+                $.ajax({
+                    url: weatherQuery,
+                    method: "GET"
+                    }).then(function(response) {
+                        $("#month-caption").text("");
+                        $("#month-caption").prepend(date.format('MMMM YYYY'));
 
-                      // $("#name-calendar").text(sessionStorage.getItem("name")+ "'s Calendar");
-                      
-                      console.log("scrollTop: " + $(".calendar").scrollTop);
-                    
-                      $("#date-jump-text").val(date.format("YYYY-MM-DD"));
+                        // $("#name-calendar").text(sessionStorage.getItem("name")+ "'s Calendar");
+                        
+                        console.log("scrollTop: " + $(".calendar").scrollTop);
+                        
+                        $("#date-jump-text").val(date.format("YYYY-MM-DD"));
 
-                      $(".sign-in").hide();
-                      $(".calendar-container").show();
-                      $(".nav-events").show();
-              
-                      $("#myVideo").show();
+                        $(".sign-in").hide();
+                        $(".calendar-container").show();
+                        $(".nav-events").show();
+                
+                        $("#myVideo").show();
+                        $("tbody").html("");
 
-                      $("#name-calendar").text(sessionStorage.getItem("name")+ "'s Calendar");
-                      var current_weather = sessionStorage.getItem("weather");
-                      console.log("name on screen");
-                      console.log(response_main);
-                      console.log(response_main.list);
-                      weather_data = response_main.list;
-                      for (var i = 1; i < 8; i++){
-                          var current_date = moment(date.format('MMM D YYYY'), 'MMM D YYYY');
-                          console.log(date.format('MMM Do'));
-                          var dt = current_date.add(i-1, 'days');
-                          console.log(i-1+": "+dt.format('MMM Do'));
-                          var weather_html = "";
-                          if (dt.format("YYYY-MM-DD") == moment().format("YYYY-MM-DD")){
-                              var current_date_2 = moment(dt.format('MMM D YYYY'), 'MMM D YYYY');
-                              console.log("current date_2: " + current_date_2.format("YYYY-MM-DD"));
-                                      var weather_html = "";
-                                      console.log(response.weather);
-                                      if (response.weather["0"].main == "Snow"){
-                                          weather = "Snow";
-                                          weather_html = "<i class = 'fas fa-snowflake' style = 'font-size:36px;color:lightblue'></i>";
-                                      }
-                                      else if (response.weather["0"].main == "Rain" || response.weather["0"].main == "Mist"){
-                                          weather = "Rain";
-                                          weather_html = "<i class = 'fas fa-cloud-rain' style = 'font-size:36px;color:lightblue'></i>";
-                                      }
-                                      else if (response.weather["0"].main == "Clouds"){
-                                          weather = "Clouds";
-                                          weather_html = "<i class = 'fas fa-cloud' style = 'font-size:36px;color:lightblue'></i>";
-                                      }
-                                      else{
-                                          weather = "Clear";
-                                          weather_html = "<i class = 'fas fa-sun' style = 'font-size:36px;font-weight:bolder;color:yellow'></i>";
-                      
-                                      }
-                                      sessionStorage.setItem("weather", weather);
-                                      if (i == 1){
-                                        console.log("day 1 is: " + current_date_2.format("YYYY-MM-DD"));
-                                        $("#day-1-date").html("<span class = 'day-display'>"+current_date_2.format('dddd')+"</span><br>"+weather_html+"<br> <span class = 'date-display'>"+current_date_2.format('D')+"</span>");
-                                        $("#day-1-date").css("background-color", "#007bff");
-                                        $("#day-1-date").css("border-radius", "none !important");
-                                        $("#day-1-date > .day-display").css("color", "white");
-                                        $("#day-1-date > .date-display").css("color", "white");
-                                      }
-                          }
-                          else if (dt >= moment() && dt <= moment().add(5, 'days')){
-                              weather_data.forEach(function(value){
-                                  if (dt.format("YYYY-MM-DD") + " 12:00:00" == value.dt_txt){
-                                      if (value.weather["0"].main == "Snow"){
-                                          weather_html = "<i class = 'fas fa-snowflake' style = 'font-size:36px;color:lightblue'></i>";
-                                      }
-                                      else if (value.weather["0"].main == "Rain" || value.weather["0"].main == "Mist"){
-                                          console.log(dt.format('MMM Do') + " rain");
-                                          weather_html = "<i class = 'fas fa-cloud-rain' style = 'font-size:36px;color:lightblue'></i>";
-                                      }
-                                      else if (value.weather["0"].main == "Clouds"){
-                                          weather_html = "<i class = 'fas fa-cloud' style = 'font-size:36px;color:lightblue'></i>";
-                                      }
-                                      else{
-                                          weather_html = "<i class = 'fas fa-sun' style = 'font-size:36px;color:yellow'></i>";
+                        $("#name-calendar").text(sessionStorage.getItem("name")+ "'s Calendar");
+                        var current_weather = sessionStorage.getItem("weather");
+                        console.log("name on screen");
+                        console.log(response_main);
+                        console.log(response_main.list);
+                        weather_data = response_main.list;
+                        for (var i = 1; i < 8; i++){
+                            var current_date = moment(date.format('MMM D YYYY'), 'MMM D YYYY');
+                            console.log(date.format('MMM Do'));
+                            var dt = current_date.add(i-1, 'days');
+                            console.log(i-1+": "+dt.format('MMM Do'));
+                            var weather_html = "";
+                            if (dt.format("YYYY-MM-DD") == moment().format("YYYY-MM-DD")){
+                                var current_date_2 = moment(dt.format('MMM D YYYY'), 'MMM D YYYY');
+                                console.log("current date_2: " + current_date_2.format("YYYY-MM-DD"));
+                                        var weather_html = "";
+                                        console.log(response.weather);
+                                        if (response.weather["0"].main == "Snow"){
+                                            weather = "Snow";
+                                            weather_html = "<i class = 'fas fa-snowflake' style = 'font-size:36px;color:lightblue'></i>";
+                                        }
+                                        else if (response.weather["0"].main == "Rain" || response.weather["0"].main == "Mist"){
+                                            weather = "Rain";
+                                            weather_html = "<i class = 'fas fa-cloud-rain' style = 'font-size:36px;color:lightblue'></i>";
+                                        }
+                                        else if (response.weather["0"].main == "Clouds"){
+                                            weather = "Clouds";
+                                            weather_html = "<i class = 'fas fa-cloud' style = 'font-size:36px;color:lightblue'></i>";
+                                        }
+                                        else{
+                                            weather = "Clear";
+                                            weather_html = "<i class = 'fas fa-sun' style = 'font-size:36px;font-weight:bolder;color:yellow'></i>";
+                        
+                                        }
+                                        sessionStorage.setItem("weather", weather);
+                                        if (i == 1){
+                                            console.log("day 1 is: " + current_date_2.format("YYYY-MM-DD"));
+                                            $("#day-1-date").html("<span class = 'day-display'>"+current_date_2.format('dddd')+"</span><br>"+weather_html+"<br> <span class = 'date-display'>"+current_date_2.format('D')+"</span>");
+                                            $("#day-1-date").css("background-color", "#007bff");
+                                            $("#day-1-date").css("border-radius", "none !important");
+                                            $("#day-1-date > .day-display").css("color", "white");
+                                            $("#day-1-date > .date-display").css("color", "white");
+                                        }
+                            }
+                            else if (dt >= moment() && dt <= moment().add(5, 'days')){
+                                weather_data.forEach(function(value){
+                                    if (dt.format("YYYY-MM-DD") + " 12:00:00" == value.dt_txt){
+                                        if (value.weather["0"].main == "Snow"){
+                                            weather_html = "<i class = 'fas fa-snowflake' style = 'font-size:36px;color:lightblue'></i>";
+                                        }
+                                        else if (value.weather["0"].main == "Rain" || value.weather["0"].main == "Mist"){
+                                            console.log(dt.format('MMM Do') + " rain");
+                                            weather_html = "<i class = 'fas fa-cloud-rain' style = 'font-size:36px;color:lightblue'></i>";
+                                        }
+                                        else if (value.weather["0"].main == "Clouds"){
+                                            weather_html = "<i class = 'fas fa-cloud' style = 'font-size:36px;color:lightblue'></i>";
+                                        }
+                                        else{
+                                            weather_html = "<i class = 'fas fa-sun' style = 'font-size:36px;color:yellow'></i>";
 
-                                      }
-                                  }
-                                  else if (dt.format("YYYY-MM-DD") + " 00:00:00" == value.dt_txt && moment(value.dt_txt, "YYYY-MM-DD HH:mm:ss") >= moment().add(4, 'days')){
-                                      if (value.weather["0"].main == "Snow"){
-                                          weather_html = "<i class = 'fas fa-snowflake' style = 'font-size:36px;color:lightblue'></i>";
-                                      }
-                                      else if (value.weather["0"].main == "Rain" || value.weather["0"].main == "Mist"){
-                                          console.log(dt.format('MMM Do') + " rain");
-                                          weather_html = "<i class = 'fas fa-cloud-rain' style = 'font-size:36px;color:lightblue'></i>";
-                                      }
-                                      else if (value.weather["0"].main == "Clouds"){
-                                          weather_html = "<i class = 'fas fa-cloud' style = 'font-size:36px;color:lightblue'></i>";
-                                      }
-                                      else{
-                                          weather_html = "<i class = 'fas fa-sun' style = 'font-size:36px;color:yellow'></i>";
+                                        }
+                                    }
+                                    else if (dt.format("YYYY-MM-DD") + " 00:00:00" == value.dt_txt && moment(value.dt_txt, "YYYY-MM-DD HH:mm:ss") >= moment().add(4, 'days')){
+                                        if (value.weather["0"].main == "Snow"){
+                                            weather_html = "<i class = 'fas fa-snowflake' style = 'font-size:36px;color:lightblue'></i>";
+                                        }
+                                        else if (value.weather["0"].main == "Rain" || value.weather["0"].main == "Mist"){
+                                            console.log(dt.format('MMM Do') + " rain");
+                                            weather_html = "<i class = 'fas fa-cloud-rain' style = 'font-size:36px;color:lightblue'></i>";
+                                        }
+                                        else if (value.weather["0"].main == "Clouds"){
+                                            weather_html = "<i class = 'fas fa-cloud' style = 'font-size:36px;color:lightblue'></i>";
+                                        }
+                                        else{
+                                            weather_html = "<i class = 'fas fa-sun' style = 'font-size:36px;color:yellow'></i>";
 
-                                      }
-                                  }
-                              });
-                          }
-                          else{
-                              weather = "Unknown";
-                              weather_html = "<i class = 'fas fa-sun' style = 'font-size:36px;color:transparent;'></i>";
-                          }
+                                        }
+                                    }
+                                });
+                            }
+                            else{
+                                weather = "Unknown";
+                                weather_html = "<i class = 'fas fa-sun' style = 'font-size:36px;color:transparent;'></i>";
+                            }
 
-                          $("#day-"+i+"-date").html("<span class = 'day-display'>"+dt.format('dddd')+"</span><br>"+weather_html+"<br> <span class = 'date-display'>"+dt.format('D')+"</span>");
-                          $("#day-"+i+"-date").attr("data-date", dt.format("YYYY-MM-DD"));
-                          
-                          $("day-7-date").css("border-right", "none !important");
-                          if (sessionStorage.getItem("weather") != "Clear" || moment().format("HH:mm") >= "17:30" || moment().format("HH:mm") <= "06:30"){
-                              $(".day-display").css("color", "white");
-                              $(".date-display").css("color", "white");
-                          }
-                      };
-                      var calendar_body = $("tbody");
+                            $("#day-"+i+"-date").html("<span class = 'day-display'>"+dt.format('dddd')+"</span><br>"+weather_html+"<br> <span class = 'date-display'>"+dt.format('D')+"</span>");
+                            console.log("current days: "+dt.format("YYYY-MM-DD"));
+                            // $("#day-"+i+"-date").attr("data-date", "");
+                            $("#day-"+i+"-date").attr("data-date", dt.format("YYYY-MM-DD"));
+                            console.log($("#day-"+i+"-date").data("date"));
+        
+                            $("day-7-date").css("border-right", "none !important");
+                            // sessionStorage.setItem("weather", weather);
+                            if (sessionStorage.getItem("weather") != "Clear" || moment().format("HH:mm") >= "17:30" || moment().format("HH:mm") <= "06:30"){
+                                $(".day-display").css("color", "white");
+                                $(".date-display").css("color", "white");
+                            }
+                        };
+                        var calendar_body = $("tbody");
 
-                      for (var i = 0; i < 24; i++){
-                          var original_time = moment("2019-01-01 12:00 am", "YYYY-mm-dd h:mm a");
-                          var time = original_time.add(i, 'hours');
-                          var row = $("<tr>");
-                          var time_display = $("<td>");
-                          time_display.text(time.format('h:mm a'));
-                          time_display.addClass("time-display");
-                          row.append(time_display);
-                          for (var j = 0; j < 7; j++){
-                              var cell = $("<td>");
-                              var day = j+1;
-                              console.log($("#day-"+day+"-date").data("data-date"));
-                              if (j==6){
-                                  cell.css("border-right", "none !important");
-                              }
-                              else{
-                                  cell.css("border-right" ,"solid 1px lightgrey");
-                              }
-                              cell.attr("data-datetime", $("#day-"+day+"-date").attr("data-date")+ " " + time.format("h:mm a"));
-                              cell.addClass("event-cell");
-                              cell.val(time.format("HH:mm"))
-                              cell.val(time.format("HH:mm"))
-                              cell.attr("data-toggle", "modal");
-                              cell.attr("data-target", "#event-modal");
-                              row.append(cell);
-                          }
-              
-                          calendar_body.append(row);
-                      }
-                      $("#scroll-body").append(calendar_body);
-                      $("#scroll-body").scrollTop(parseFloat(moment().format("HH"))*116);
-
-                      current_weather = sessionStorage.getItem("weather");
-                      if (current_weather == "Clouds"){
-                          $("#myVideo").attr("src", "assets/images/storm_clouds_timelapse.mp4");
-                      }
-                      else if (current_weather == "Snow"){
-                          $("#myVideo").attr("src", "assets/images/snow.mp4");
-                          $("#myVideo").css("min-width", "100%");
-                      }
-                      else if (current_weather == "Rain"){
-                          $("#myVideo").attr("src", "assets/images/storm_raindrops_on_window.mp4");
-                      }
-                      else if (moment().format("HH:mm") >= "17:30" || moment().format("HH:mm") <= "06:30"){
-                          $("#myVideo").attr("src", "assets/images/Rainbow_Nebula_4K_Motion_Background.mp4");
-                      }
-                      else if (current_weather == "Clear"){
-                          $("#myVideo").attr("src", "assets/images/beach_wide.mp4");
-                          $("#myVideo").css("height", "120%");
-                          $("table").removeClass("table-dark");
-                          $("table").css("background-color", "white");
-                          $("table").css("border-color", "black");
-                          $("table").css("color", "black");
-                          $("#day-1-date").css("background-color", "#007bff");
-                          $("#day-1-date").css("color", "white");
-                      }
-
-                      $(".date-jump-submit").on("click", function(event){
-                        event.preventDefault();
-                        if (moment($("#date-jump-text").val(), "YYYY-MM-DD").isValid()){
-                            load_calendar(moment($("#date-jump-text").val(), "YYYY-MM-DD"), sessionStorage.getItem("uid"));
-                            database.ref(sessionStorage.getItem("uid")).update({
-                                last_login: moment().format("YYYY-MM-DD hh:mm a")
-                            });
+                        for (var i = 0; i < 24; i++){
+                            var original_time = moment("2019-01-01 12:00 am", "YYYY-MM-DD h:mm a");
+                            var time = original_time.add(i, 'hours');
+                            var row = $("<tr>");
+                            var time_display = $("<td>");
+                            time_display.text(time.format('h:mm a'));
+                            time_display.addClass("time-display");
+                            row.append(time_display);
+                            for (var j = 0; j < 7; j++){
+                                var cell = $("<td>");
+                                var day = j+1;
+                                console.log($("#day-"+day+"-date").attr("data-date"));
+                                if (j==6){
+                                    cell.css("border-right", "none !important");
+                                }
+                                else{
+                                    cell.css("border-right" ,"solid 1px lightgrey");
+                                }
+                                // cell.attr("data-datetime", "");
+                                cell.attr("data-datetime", $("#day-"+day+"-date").attr("data-date")+ " " + time.format("HH:mm"));
+                                cell.data("datetime", $("#day-"+day+"-date").attr("data-date")+ " " + time.format("HH:mm"));
+                                console.log(cell.attr("data-datetime"));
+                                cell.addClass("event-cell");
+                                cell.val(time.format("HH:mm"));
+                                cell.attr("data-toggle", "modal");
+                                cell.attr("data-target", "#event-modal");
+                                row.append(cell);
+                            }
+                
+                            calendar_body.append(row);
                         }
-                        else{
-                            console.log("No");
+                        $("#scroll-body").append(calendar_body);
+                        $("#scroll-body").scrollTop(parseFloat(moment().format("HH"))*116);
+
+                        console.log(events);
+                        for(var i = 0; i < events.length; i++){
+                            console.log(events[i]);
+                            console.log("doing shit");
+                            var start_datetime =events[i].start_date + " " +events[i].start_time;
+                            console.log(start_datetime);
+                            var start_datetime_lookup =events[i].start_date + " " + moment(events[i].start_time, "HH:mm").format("HH")+":00";
+                            console.log(start_datetime_lookup);
+                            var end_datetime =events[i].start_date + " " +events[i].end_time;
+                            console.log(end_datetime);
+
+                            var focused_cell = $("td[data-datetime = '"+start_datetime_lookup+"']");
+                            focused_cell.html("");
+                            console.log(focused_cell);
+                            if (moment(start_datetime, "YYYY-MM-DD HH:mm").diff(moment(start_datetime_lookup, "YYYY-MM-DD HH:mm"), "minutes") >= 30){
+                                console.log(":30");
+                                if (sessionStorage.getItem("weather") != "Clear"){
+                                    focused_cell.css("background", "linear-gradient(to bottom, #212529 0%,#212529 50%,#212529 50%,#007bff 50%,#007bff 100%)");
+                                }
+                                else{
+                                    focused_cell.css("background", "linear-gradient(to bottom, white 0%,white 50%,white 50%,#007bff 50%,#007bff 100%)");
+
+                                }
+                                var title_div = $("<div>");
+                                title_div.css("position", "absolute");
+                                title_div.css("height", "50%");
+                                title_div.css("width", "100%");
+                                title_div.css("overflow", "hidden");
+                                title_div.css("text-overflow", "ellipsis");
+                                title_div.css("bottom", "0");
+                                title_div.css("left", "0");
+                                title_div.css("display", "block");
+                                title_div.css("white-space", "nowrap");
+                                
+                                title_div.text(events[i].event_title);
+                                focused_cell.append(title_div);  
+                            }
+
+                            else if (moment(end_datetime, "YYYY-MM-DD HH:mm").diff(moment(start_datetime, "YYYY-MM-DD HH:mm"), "minutes") <= 30){
+                                console.log("half hour event");
+                                if (sessionStorage.getItem("weather") != "Clear"){
+                                    focused_cell.css("background", "linear-gradient(to bottom, #007bff 0%,#007bff 50%,#007bff 50%,#212529 50%,#212529 100%)");
+                                }
+                                else{
+                                    focused_cell.css("background", "linear-gradient(to bottom, #007bff 0%,#007bff 50%,#007bff 50%,white 50%,white 100%)");
+
+                                }
+                                var title_div = $("<div>");
+                                title_div.css("position", "absolute");
+                                title_div.css("height", "50%");
+                                title_div.css("width", "100%");
+                                title_div.css("overflow", "hidden");
+                                title_div.css("text-overflow", "ellipsis");
+                                title_div.css("top", "0");
+                                title_div.css("left", "0");
+                                title_div.css("display", "block");
+                                title_div.css("white-space", "nowrap");
+                                
+                                title_div.text(events[i].event_title);
+                                focused_cell.append(title_div); 
+                            }
+
+                            else{
+                                console.log("fuck");
+                                focused_cell.css("background-color", "#007bff");
+                                var title_div = $("<div>");
+                                title_div.css("position", "absolute");
+                                title_div.css("height", "100%");
+                                title_div.css("width", "100%");
+                                title_div.css("overflow", "hidden");
+                                title_div.css("text-overflow", "ellipsis");
+                                title_div.css("top", "0");
+                                title_div.css("left", "0");
+                                title_div.css("display", "block");
+                                title_div.css("white-space", "nowrap");
+                                
+                                title_div.text(events[i].event_title);
+                                focused_cell.append(title_div); 
+                            }
+
+
+                            var populating_event_cell = true;
+                            var j = 1;
+                            while (populating_event_cell == true){
+                                var focused_time = moment(start_datetime_lookup, "YYYY-MM-DD HH:mm").add(j, "hours").format("YYYY-MM-DD HH:mm");
+                                var focused_added_cell = $("td[data-datetime = '"+focused_time+"']");
+                                if (moment(end_datetime, "YYYY-MM-DD HH:mm").diff(moment(focused_time, "YYYY-MM-DD HH:mm"), 'minutes') <= 0){
+                                    populating_event_cell = false;
+                                }
+                                else if (moment(end_datetime, "YYYY-MM-DD HH:mm").diff(moment(focused_time, "YYYY-MM-DD HH:mm"), 'minutes') <= 30){
+                                    if (sessionStorage.getItem("weather") == "Clear"){
+                                        focused_added_cell.css("background", "linear-gradient(to bottom, #007bff 0%,#007bff 50%,#007bff 50%,white 50%,white 100%)");
+                                    }
+                                    else{
+                                        focused_added_cell.css("background", "linear-gradient(to bottom, #007bff 0%,#007bff 50%,#007bff 50%,#212529 50%,#212529 100%)");
+
+                                    }
+                                    var title_div = $("<div>");
+                                    title_div.css("position", "absolute");
+                                    title_div.css("height", "50%");
+                                    title_div.css("width", "100%");
+                                    title_div.css("overflow", "hidden");
+                                    title_div.css("text-overflow", "ellipsis");
+                                    title_div.css("top", "0");
+                                    title_div.css("left", "0");
+                                    title_div.css("display", "block");
+                                    title_div.css("white-space", "nowrap");
+                                    
+                                    title_div.text("");
+                                    focused_added_cell.append(title_div);
+                                    populating_event_cell = false;
+                                }
+                                else{
+                                    focused_added_cell.css("background-color", "#007bff");
+                                    var title_div = $("<div>");
+                                    title_div.css("position", "absolute");
+                                    title_div.css("height", "100%");
+                                    title_div.css("width", "100%");
+                                    title_div.css("overflow", "hidden");
+                                    title_div.css("text-overflow", "ellipsis");
+                                    title_div.css("top", "0");
+                                    title_div.css("left", "0");
+                                    title_div.css("display", "block");
+                                    title_div.css("white-space", "nowrap");
+                                    
+                                    title_div.text("");
+                                    focused_added_cell.append(title_div);
+                                }
+                                console.log(populating_event_cell);
+                                j++;
+                                
+                            }
+                        };
+
+                        current_weather = sessionStorage.getItem("weather");
+                        if (current_weather == "Clouds"){
+                            $("#myVideo").attr("src", "assets/images/storm_clouds_timelapse.mp4");
                         }
-                    });
-              });
+                        else if (current_weather == "Snow"){
+                            $("#myVideo").attr("src", "assets/images/snow.mp4");
+                            $("#myVideo").css("min-width", "100%");
+                        }
+                        else if (current_weather == "Rain"){
+                            $("#myVideo").attr("src", "assets/images/storm_raindrops_on_window.mp4");
+                        }
+                        else if (moment().format("HH:mm") >= "17:30" || moment().format("HH:mm") <= "06:30"){
+                            $("#myVideo").attr("src", "assets/images/Rainbow_Nebula_4K_Motion_Background.mp4");
+                        }
+                        else if (current_weather == "Clear"){
+                            $("#myVideo").attr("src", "assets/images/beach_wide.mp4");
+                            $("#myVideo").css("height", "120%");
+                            $("table").removeClass("table-dark");
+                            $("table").css("background-color", "white");
+                            $("table").css("border-color", "black");
+                            $("table").css("color", "black");
+                            $("#day-1-date").css("background-color", "#007bff");
+                            $("#day-1-date").css("color", "white");
+                        }
 
-          });
+                        $(".date-jump-submit").on("click", function(event){
+                            event.preventDefault();
+                            if (moment($("#date-jump-text").val(), "YYYY-MM-DD").isValid()){
+                                console.log(moment($("#date-jump-text").val(), "YYYY-MM-DD").format("YYYY-MM-DD"));
+                                $("tbody").html("");
+                                load_calendar(moment($("#date-jump-text").val(), "YYYY-MM-DD"), sessionStorage.getItem("uid"));
+                                database.ref(sessionStorage.getItem("uid")).update({
+                                    last_login: moment().format("YYYY-MM-DD hh:mm a")
+                                });
+                            }
+                            else{
+                                console.log("No");
+                            }
+                        });
+                });
 
-  
-          
-      });
+            });
 
+            });
+            
+        });
 
-      // var current_weather = sessionStorage.getItem("weather");
-      // if (current_weather == "Clouds"){
-      //     $("#myVideo").attr("src", "assets/images/storm_clouds_timelapse.mp4");
-      // }
-      // else if (current_weather == "Snow"){
-      //     $("#myVideo").attr("src", "assets/images/snow.mp4");
-      //     $("#myVideo").css("min-width", "100%");
-      // }
-      // else if (current_weather == "Rain"){
-      //     $("#myVideo").attr("src", "assets/images/storm_raindrops_on_window.mp4");
-      // }
-      // else if (moment().format("HH:mm") >= "17:30" || moment().format("HH:mm") <= "06:30"){
-      //     $("#myVideo").attr("src", "assets/images/Stars.mp4");
-      // }
-      // else if (current_weather == "Clear"){
-      //     $("#myVideo").attr("src", "assets/images/beach_wide.mp4");
-      //     $("#myVideo").css("height", "120%");
-      //     $("table").removeClass("table-dark");
-      //     $("table").css("background-color", "white");
-      //     $("table").css("border-color", "black");
-      //     $("table").css("color", "black");
-      //     $("#day-1-date").css("background-color", "#007bff");
-      //     $("#day-1-date").css("color", "white");
-      // }
-
-
-      // var calendar_body = $("tbody");
-
-      // for (var i = 0; i < 24; i++){
-      //     var original_time = moment("2019-01-01 12:00 am", "YYYY-mm-dd h:mm a");
-      //     var time = original_time.add(i, 'hours');
-      //     var row = $("<tr>");
-      //     var time_display = $("<td>");
-      //     time_display.text(time.format('h:mm a'));
-      //     time_display.addClass("time-display");
-      //     row.append(time_display);
-      //     for (var j = 0; j < 7; j++){
-      //         var cell = $("<td>");
-      //         var day = j+1;
-      //         console.log($("#day-"+day+"-date").data("data-date"));
-      //         if (j==6){
-      //             cell.css("border-right", "none !important");
-      //         }
-      //         else{
-      //             cell.css("border-right" ,"solid 1px lightgrey");
-      //         }
-      //         cell.attr("data-datetime", $("#day-"+day+"-date").attr("data-date")+ " " + time.format("h:mm a"));
-      //         cell.addClass("event-cell");
-      //         row.append(cell);
-      //     }
-
-      //     calendar_body.append(row);
-      // }
-      // $("#scroll-body").append(calendar_body);
   }
 
-  $("#myVideo").hide();
-  $(".calendar-container").hide();
-  $(".nav-events").hide();
+    $("#myVideo").hide();
+    $(".calendar-container").hide();
+    $(".nav-events").hide();
+
+
+    $("#event-address").hide();
+    $("#event-location").change(function(){
+    if ($("#event-location").val() == "add-location") {
+    $("#event-address").show();
+    } else {
+    $("#event-address").hide();
+    }
+    });
+
+    $("#start-address").hide();
+    $("#start-location").change(function(){
+    if ($("#start-location").val() == "add-location") {
+    $("#start-address").show();
+    } else {
+    $("#start-address").hide();
+    }
+    });
   
 
-  $(".submit-btn").on("click", function(event){
+  $("#event-submit").on("click", function(event){
       event.preventDefault();
-      send_sign_form();
+      send_event_form();
   });
+  $(".submit-btn").on("click", function(event){
+    event.preventDefault();
+    send_sign_form();
+    });
   $(".sign-in-select").on("click", function(){
       console.log($(this));
       $(this).css("color", "white");
@@ -635,69 +867,82 @@ $(document).ready(function(){
           // An error happened.
         });
     });
+
+    $("#add-event-nav").on("click", function(value){
+        $("#event-start-time").val("");
+        $("#event-start-date").val("");
+        $("#event-end-time").val("");
+    });
+
+
   });
 
 
 
-  var someID = '';
+  //var someID = '';
   $(document).on("click", ".event-cell", function(){
             // Adds the calendar time selection to the start time input on event form
             $("#event-start-time").val($(this).val());//puts start time in event modal relative to cell selected
-            $(this).css("background", "linear-gradient(to bottom, #212529 0%,#212529 50%,#212529 50%,#007bff 50%,#007bff 100%)");
-            someID = $(this).attr("data-datetime").split(' ').join('');
-            var span = $("<div>");
-            span.attr('id', someID)
-            span.css("position", "absolute");
-            span.css("height", "50%");
-            span.css("width", "100%");
-            span.css("overflow", "hidden");
-            span.css("text-overflow", "ellipsis");
-            span.css("bottom", "0");
-            span.css("left", "0");
-            span.css("display", "block");
-            span.css("white-space", "nowrap");
-            $(this).append(span);  
-            // Adds event title to calendar
+            $("#event-start-date").val($(this).attr("data-datetime").split(" ")[0]);
+            $("#event-end-time").val(moment($(this).val(), "HH:mm").add(1, 'hours').format("HH:mm"));
+        //     console.log("time: " + $(this).val());
+        //     $(this).css("background", "linear-gradient(to bottom, #212529 0%,#212529 50%,#212529 50%,#007bff 50%,#007bff 100%)");
+        //     someID = $(this).attr("data-datetime").split(' ').join('');
+        //     var span = $("<div>");
+        //     span.attr('id', someID)
+        //     span.css("position", "absolute");
+        //     span.css("height", "50%");
+        //     span.css("width", "100%");
+        //     span.css("overflow", "hidden");
+        //     span.css("text-overflow", "ellipsis");
+        //     span.css("bottom", "0");
+        //     span.css("left", "0");
+        //     span.css("display", "block");
+        //     span.css("white-space", "nowrap");
+        //     $(this).append(span);  
+        //     // Adds event title to calendar
 
-          $("#event-submit").on("click", function(e){
-            e.preventDefault();
-            var eventTitle = $("#event-title").val();
-            var eventAddress = $("#event-address").val();
-            var eventCity = $("#event-city").val();
-            var eventState = $("#event-state").val();
-            var eventZip = $("#event-zip").val();
-            var whatwewant = document.getElementById(someID);
-            whatwewant.innerHTML = eventTitle;
-            $("#event-title").val("");
-            $("#event-address").val("");
-            $("#event-city").val("");
-            $("#event-state").val("");
-            $("#event-zip").val("");
-            showNavEnd();
-            showNavStart();
-        })
+        //   $("#event-submit").on("click", function(e){
+        //     e.preventDefault();
+        //     var eventTitle = $("#event-title").val();
+        //     var eventAddress = $("#event-address").val();
+        //     var eventCity = $("#event-city").val();
+        //     var eventState = $("#event-state").val();
+        //     var eventZip = $("#event-zip").val();
+        //     var whatwewant = document.getElementById(someID);
+        //     whatwewant.innerHTML = eventTitle;
+        //     $("#event-title").val("");
+        //     $("#event-address").val("");
+        //     $("#event-city").val("");
+        //     $("#event-state").val("");
+        //     $("#event-zip").val("");
+            // showNavEnd();
+            // showNavStart();
+        });
 
       // Function to show event address input on event form
-      $(function(showNavEnd){
-        $("#event-address").hide();
-        $("#event-location").change(function(){
-          if ($("#event-location").val() == "add-location") {
-            $("#event-address").show();
-          } else {
-            $("#event-address").hide();
-            }
-        });
-      });
+    //   $(function(showNavEnd){
+    //     $("#event-address").hide();
+    //     $("#event-location").change(function(){
+    //       if ($("#event-location").val() == "add-location") {
+    //         $("#event-address").show();
+    //       } else {
+    //         $("#event-address").hide();
+    //         }
+    //     });
+    //   });
         
-      // Function to show starting address input on event form
-      $(function(showNavStart){
-        $("#start-address").hide();
-        $("#start-location").change(function(){
-          if ($("#start-location").val() == "add-location") {
-            $("#start-address").show();
-          } else {
-            $("#start-address").hide();
-            }
-        });
-      });
-});
+    //   // Function to show starting address input on event form
+    //   $(function(showNavStart){
+    //     $("#start-address").hide();
+    //     $("#start-location").change(function(){
+    //       if ($("#start-location").val() == "add-location") {
+    //         $("#start-address").show();
+    //       } else {
+    //         $("#start-address").hide();
+    //         }
+    //     });
+    //   });
+
+//});
+
