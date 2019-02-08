@@ -639,6 +639,16 @@ $(document).ready(function(){
                                 title_div.css("left", "0");
                                 title_div.css("display", "block");
                                 title_div.css("white-space", "nowrap");
+                                title_div.attr("data-title", events[i].event_title);
+                                title_div.attr("data-startdate", events[i].start_date);
+                                title_div.attr("data-starttime", events[i].start_time);
+                                title_div.attr("data-endtime", events[i].end_time);
+                                title_div.attr("data-ziporigin", events[i].start_loc);
+                                title_div.attr("data-ziploc", events[i].end_loc);
+                                title_div.attr("data-toggle", "popover");
+                                title_div.attr("data-trigger", "hover");
+                                title_div.attr("data-html", "true");
+                                title_div.attr("data-content", "Event Name: <b>"+events[i].event_title+"</b><br>Date: "+moment(events[i].start_date, "YYYY-MM-DD").format("MMM D, YYYY") + "<br>Start Time: "+moment(events[i].start_time, "HH:mm").format("h:mm a")+"<br>End Time: "+moment(events[i].end_time, "HH:mm").format("h:mm a")+"<br>Coming From: " + events[i].start_loc + "<br>Going to: "+events[i].end_loc+"</div>");
                                 
                                 title_div.text(events[i].event_title);
                                 focused_cell.append(title_div);  
@@ -663,6 +673,16 @@ $(document).ready(function(){
                                 title_div.css("left", "0");
                                 title_div.css("display", "block");
                                 title_div.css("white-space", "nowrap");
+                                title_div.attr("data-title", events[i].event_title);
+                                title_div.attr("data-startdate", events[i].start_date);
+                                title_div.attr("data-starttime", events[i].start_time);
+                                title_div.attr("data-endtime", events[i].end_time);
+                                title_div.attr("data-ziporigin", events[i].start_loc);
+                                title_div.attr("data-ziploc", events[i].end_loc);
+                                title_div.attr("data-toggle", "popover");
+                                title_div.attr("data-trigger", "hover");
+                                title_div.attr("data-html", "true");
+                                title_div.attr("data-content", "Event Name: <b>"+events[i].event_title+"</b><br>Date: "+moment(events[i].start_date, "YYYY-MM-DD").format("MMM D, YYYY") + "<br>Start Time: "+moment(events[i].start_time, "HH:mm").format("h:mm a")+"<br>End Time: "+moment(events[i].end_time, "HH:mm").format("h:mm a")+"<br>Coming From: " + events[i].start_loc + "<br>Going to: "+events[i].end_loc+"</div>");
                                 
                                 title_div.text(events[i].event_title);
                                 focused_cell.append(title_div); 
@@ -681,6 +701,16 @@ $(document).ready(function(){
                                 title_div.css("left", "0");
                                 title_div.css("display", "block");
                                 title_div.css("white-space", "nowrap");
+                                title_div.attr("data-title", events[i].event_title);
+                                title_div.attr("data-startdate", events[i].start_date);
+                                title_div.attr("data-starttime", events[i].start_time);
+                                title_div.attr("data-endtime", events[i].end_time);
+                                title_div.attr("data-ziporigin", events[i].start_loc);
+                                title_div.attr("data-ziploc", events[i].end_loc);
+                                title_div.attr("data-toggle", "popover");
+                                title_div.attr("data-trigger", "hover");
+                                title_div.attr("data-html", "true");
+                                title_div.attr("data-content", "Event Name: <b>"+events[i].event_title+"</b><br>Date: "+moment(events[i].start_date, "YYYY-MM-DD").format("MMM D, YYYY") + "<br>Start Time: "+moment(events[i].start_time, "HH:mm").format("h:mm a")+"<br>End Time: "+moment(events[i].end_time, "HH:mm").format("h:mm a")+"<br>Coming From: " + events[i].start_loc + "<br>Going to: "+events[i].end_loc+"</div>");
                                 
                                 title_div.text(events[i].event_title);
                                 focused_cell.append(title_div); 
@@ -713,6 +743,16 @@ $(document).ready(function(){
                                     title_div.css("left", "0");
                                     title_div.css("display", "block");
                                     title_div.css("white-space", "nowrap");
+                                    title_div.attr("data-title", events[i].event_title);
+                                    title_div.attr("data-startdate", events[i].start_date);
+                                    title_div.attr("data-starttime", events[i].start_time);
+                                    title_div.attr("data-endtime", events[i].end_time);
+                                    title_div.attr("data-ziporigin", events[i].start_loc);
+                                    title_div.attr("data-ziploc", events[i].end_loc);
+                                    title_div.attr("data-toggle", "popover");
+                                    title_div.attr("data-trigger", "hover");
+                                    title_div.attr("data-html", "true");
+                                    title_div.attr("data-content", "Event Name: <b>"+events[i].event_title+"</b><br>Date: "+moment(events[i].start_date, "YYYY-MM-DD").format("MMM D, YYYY") + "<br>Start Time: "+moment(events[i].start_time, "HH:mm").format("h:mm a")+"<br>End Time: "+moment(events[i].end_time, "HH:mm").format("h:mm a")+"<br>Coming From: " + events[i].start_loc + "<br>Going to: "+events[i].end_loc+"</div>");
                                     
                                     title_div.text("");
                                     focused_added_cell.append(title_div);
@@ -730,7 +770,17 @@ $(document).ready(function(){
                                     title_div.css("left", "0");
                                     title_div.css("display", "block");
                                     title_div.css("white-space", "nowrap");
-                                    
+                                    title_div.attr("data-title", events[i].event_title);
+                                    title_div.attr("data-startdate", events[i].start_date);
+                                    title_div.attr("data-starttime", events[i].start_time);
+                                    title_div.attr("data-endtime", events[i].end_time);
+                                    title_div.attr("data-ziporigin", events[i].start_loc);
+                                    title_div.attr("data-ziploc", events[i].end_loc);
+                                    title_div.attr("data-toggle", "popover");
+                                    title_div.attr("data-trigger", "hover");
+                                    title_div.attr("data-html", "true");
+                                    title_div.attr("data-content", "Event Name: <b>"+events[i].event_title+"</b><br>Date: "+moment(events[i].start_date, "YYYY-MM-DD").format("MMM D, YYYY") + "<br>Start Time: "+moment(events[i].start_time, "HH:mm").format("h:mm a")+"<br>End Time: "+moment(events[i].end_time, "HH:mm").format("h:mm a")+"<br>Coming From: " + events[i].start_loc + "<br>Going to: "+events[i].end_loc+"</div>");
+
                                     title_div.text("");
                                     focused_added_cell.append(title_div);
                                 }
@@ -739,7 +789,7 @@ $(document).ready(function(){
                                 
                             }
                         };
-
+                        $('[data-toggle="popover"]').popover();
                         current_weather = sessionStorage.getItem("weather");
                         if (current_weather == "Clouds"){
                             $("#myVideo").attr("src", "assets/images/storm_clouds_timelapse.mp4");
