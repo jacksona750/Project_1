@@ -9,18 +9,10 @@
 
 .calendar{
     z-index: 1;
-    /* background-color: white !important; */
     border-radius: 25px;
     border-color: transparent !important;
     border-style: transparent !important;
 }
-
-/* .calendar-container{
-    max-width: 1112px !important;
-    margin-right: 0 !important;
-    margin-left: 0 !important;
-    padding: 0 !important;
-} */
 
 
 .option{
@@ -99,14 +91,12 @@ th{
 }
 .day-display{
     color:grey;
-    /* text-align: center !important; */
 }
 
 .date-display{
     font-size: 60px !important;
     color: black;
     font-weight: normal !important;
-    /* text-align: right !important; */
 }
 
 #month-caption{
@@ -116,9 +106,7 @@ th{
     font-weight: 900;
     text-align: left;
     position: sticky !important;
-    /* float: left; */
     left: 0;
-    /* clear: both; */
     display: inline;
 }
 

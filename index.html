@@ -10,7 +10,6 @@
     <script type = "text/javascript" src="assets/javascript/app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/5.8.2/firebase.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-    <!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script> -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
     <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.7.0/css/all.css' integrity='sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ' crossorigin='anonymous'>
@@ -20,14 +19,8 @@
 </head>
 <body>
     <video autoplay muted loop id="myVideo" src = "assets/images/storm_raindrops_on_window.mp4" type="video/mp4">
-        <!-- <source src="assets/images/storm_raindrops_on_window.mp4" type="video/mp4"> -->
+
     </video>
-    <!-- <div class="jumbotron">
-        <h1 class="display-4">Hello, world!</h1>
-        <p class="lead">This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information.</p>
-        <hr class="my-4">
-        <p>It uses utility classes for typography and spacing to space content out within the larger container.</p>
-    </div> -->
 </div>
     <nav class="navbar navbar-expand-lg navbar-dark nav-events">
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,7 +29,7 @@
         <div class="collapse navbar-collapse" id="navbarText">
             <ul class="navbar-nav mr-auto">
             <li class="nav-item active nav-event">
-                <a class="nav-link" href="index.html"><h1 id = "name-calendar"></h1><span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="https://jacksona750.github.io/Project_1/index.html"><h1 id = "name-calendar"></h1><span class="sr-only">(current)</span></a>
             </li>
             </ul>
             <ul class="navbar-nav mr-auto right">
@@ -45,9 +38,6 @@
             </li>
             <li class="nav-item nav-event">
                 <a class="nav-link" href="#" data-toggle="modal" data-target="#movie-modal">Add a movie</a>
-            </li>
-            <li class="nav-item nav-event">
-                <a class="nav-link" href="#" data-toggle="modal" data-target="#restaurant-modal">Add a restaurant</a>
             </li>
             <li class="nav-item nav-event">
                 <a class="nav-link" id = "sign-out">Sign Out</div>
@@ -201,7 +191,7 @@
                             </div>
                         </div>                                
                         <div class="form-group row">
-                            <label for="inputZip" class="col-sm-4 col-form-label text-right">Zip</label>
+                            <label for="inputZip" class="col-sm-4 col-form-label text-right">Zip<span class = "required">*</span></label>
                             <div class="col-sm-8">
                             <input type="text" class="form-control" id="event_loc_inputZip" placeholder="90210">                                    
                             </div>
@@ -236,7 +226,7 @@
                             </div>
                         </div>                                
                         <div class="form-group row">
-                            <label for="inputZip" class="col-sm-4 col-form-label text-right">Zip</label>
+                            <label for="inputZip" class="col-sm-4 col-form-label text-right">Zip<span class = "required">*</span></label>
                             <div class="col-sm-8">
                             <input type="text" class="form-control" id="event_origin_inputZip" placeholder="90210">                                    
                             </div>
@@ -323,47 +313,37 @@
 </div>
 
 <div class="container">
-    <div class="modal" tabindex="-1" role="dialog" id="movie-modal">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Add a Movie</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-                </button>
+        <div class="modal" tabindex="-1" role="dialog" id="movie-modal">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Add a Movie</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="movieEvent">
+                            <div class="form-group row">
+                                <label for="inputTitle" class="col-sm-2 col-form-label">Start Date</label>
+                                <div class="col-sm-10">
+                                    <input class="form-control" id="start-input" placeholder="2019-01-01" type="text">
+                                </div>
+                            </div>
+                            <div class="form-group row" id="zip-input">
+                                <label for="inputZip" class="col-sm-2 col-form-label">Zip Code</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="movieInputZip" placeholder="90210">
+                                </div>
+                            </div>
+                        </form>
+                        <!-- where to append movie card stuff-->
+                        <div id="movieContent">
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="modal-body">    
-            <form>
-                <div class="form-group row">
-                <label for="inputTitle" class="col-sm-2 col-form-label">Title</label>
-                    <div class="col-sm-10">
-                    <input type="text" class="form-control" id="movie-name" placeholder="Movie Title">
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <label for="selectLocation" class="col-sm-2 col-form-label">Location</label>
-                    <div class="col-sm-10">
-                    <select class="form-control" id="select-location">
-                        <option value="default-location">Use Default Location</option>
-                        <option value="add-location">Add New Location</option>
-                    </select>
-                    </div>
-                </div>                          
-                <div class="form-group row">
-                    <label for="inputZip" class="col-sm-3 col-form-label text-right">Zip</label>
-                    <div class="col-sm-9">
-                    <input type="text" class="form-control" id="inputZip" placeholder="90210">                                    
-                    </div>
-                </div>
-            </form>
         </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-primary">Save changes</button>
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        </div>
-    </div>
-</div>
-</div>
 
     <div class = "container calendar-container mt-2 mb-5">
         <div class = "table-responsive">
@@ -401,6 +381,25 @@
                         </button>
                         </div>
                         <div class="modal-body" id = "error-body">
+                        <p></p>
+                        </div>
+                        <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal" id = "myReminderModal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" id = "myReminderModal" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        <h5 class="modal-title">Upcoming Events</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        </div>
+                        <div class="modal-body" id = "reminder-body">
                         <p></p>
                         </div>
                         <div class="modal-footer">

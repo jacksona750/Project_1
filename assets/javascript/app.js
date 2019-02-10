@@ -1,96 +1,5 @@
-// // Selectors
-// // var email = $("#inputEmail").val().trim();
-// // var password = $("#inputPassword").val().trim();
-// // var confPassword = $("#inputConfirmPassword").val().trim();
-// // var address = $("#inputAddress").val().trim();
-// // var city = $("#inputCity").val().trim();
-// // var state = $("#inputState").val().trim();
-// // var zip = $("#inputZip").val().trim();
-
-// // The values below will be pulled from our location query
-// var originLat = "34.02517";
-// var originLong = "-118.47488";
-// var destLat = "34.06877";
-// var destLong = "-118.44896";
-
-
-// var address = "2029 olympic blvd santa monica, ca 90404"
-
-// This is our API key. Add your own API key between the ""
-// var weatherAPI = "265a46d65db9c9a8b164aa9180136f67";
-// var mapsAPI = "OEeXUFJsMGPGX6jvueAh5pJ2YyUCzbay";
-// var restAPI = "DOF99u8HLWYBY7XS57PcCuQ6aJdh0eWYQVSSRXCj3oWg-OPD8t6QIKTHMkbL-uuJhmVNE-by-DG2tz7bQndWFBjgc_-AF1wbFUD2tLDFQNVrUmAsEHRnJVzA_gZZXHYx";
-// var cityName = "burbank";
-
-// // // Here we are building the URL we need to query the weather database
-// var weatherQuery = "https://api.openweathermap.org/data/2.5/forecast?q=" + cityName + ",us&appid=" + weatherAPI;
-
-// // AJAX call for weather
-// $.ajax({
-//   url: weatherQuery,
-//   method: "GET"
-// }).then(function(response) {
-
-//   // Create CODE HERE to Log the weatherQuery
-//   console.log(weatherQuery);
-//   // Create CODE HERE to log the resulting object
-//   console.log(response);
-//   response.list.forEach(function(value){
-//     //   console.log(value.weather["0"].main);
-//     console.log(moment(value.dt_txt, "YYYY-MM-DD hh:mm:ss").format("YYYY-MM-DD hh:mm:ss"));
-//   })
-    
-// })
-
-
-// // Buidling the URL to query the TomTom map search database
-// var locationQuery = "https://api.tomtom.com/search/2/geocode/" + address + ".JSON?countrySet=us&key=" + mapsAPI;
-
-// // AJAX call for location
-// $.ajax({
-//     url: locationQuery,
-//     method: "GET"
-//   }).then(function(response) {
-  
-//     // Create CODE HERE to Log the locationQuery
-//     console.log(locationQuery)
-//     // Create CODE HERE to log the resulting object
-//     console.log(response)
-//   })
-
-// // Buidling the URL to query the TomTom database for route duration
-// var durationQuery = "https://api.tomtom.com/routing/1/calculateRoute/" + originLat + "," + originLong + ":" + destLat + "," + destLong +"/json?&key=" + mapsAPI;
-
-// // AJAX call for location
-// $.ajax({
-//     url: durationQuery,
-//     method: "GET"
-//   }).then(function(response) {
-  
-//     // Create CODE HERE to Log the locationQuery
-//     console.log(durationQuery)
-//     // Create CODE HERE to log the resulting object
-//     console.log(response)
-//   })
-
-// // Buidling the URL to query the TomTom database for route duration
-// var restaurantQuery = "https://api.yelp.com/v3/businesses/search" + "/json?&key=" + mapsAPI;
-
-// // AJAX call for location
-// $.ajax({
-//     url: restaurantQuery,
-//     method: "GET"
-//   }).then(function(response) {
-  
-//     // Create CODE HERE to Log the locationQuery
-//     console.log(durationQuery)
-//     // Create CODE HERE to log the resulting object
-//     console.log(response)
-//   })
-
-
 $(document).ready(function(){
-    // Initialize Firebase
+// Initialize Firebase
   var config = {
       apiKey: "AIzaSyCxFLkeQbYJRU5z5b2nOBCIgz3-XeJpA_4",
       authDomain: "calendar-app-47185.firebaseapp.com",
@@ -104,32 +13,84 @@ $(document).ready(function(){
 
   var database = firebase.database();
 
-  // database.ref('charlieglass').set({
-  //     msg: 'Hello'
-  // });
+  $("#movieInputZip").keyup(function(e) {
+    
+    if (e.keyCode == 13) { //triggers when a user presses enter after filling out a valid zip
+      var apikey = "8me7ng6utpessays6nzfdsut";
+      var baseUrl = "http://data.tmsapi.com/v1.1/movies/showings?startDate=";
+      var zipCode = $("#movieInputZip").val();
+      sessionStorage.setItem("movie_zip", zipCode);
+      var movieDate = $("#start-input").val().trim();
+      var userDate = new Date(movieDate);
+      var today =
+        userDate.getFullYear() +
+        "-" +
+        (userDate.getMonth() + 1) +
+        "-" +
+        (userDate.getDate() + 1);
 
-  // database.ref('charlieglass').on("value", function(snapshot){
-  //     console.log(snapshot.val().msg);
-  // });
+        //Gets movie info and displays it
+      $.ajax({
+        url: baseUrl+today+"&zip="+zipCode+"&api_key="+apikey,
+        method: "GET"
+      }).then(function(response){
+            if (response == null) {
+              return;
+            }
+            response.forEach(function(movie) {
+              var movieTitle = movie.title;
+              var nearest_time = false;
+              var i = 0;
+              while(nearest_time == false){
+                var movieDate = movie.showtimes[i].dateTime.slice(0,-6);
+                var movieTime = moment(movie.showtimes[i].dateTime.slice(-6), "THH:mm").format("h:mm A");
+                var movieTheatre = movie.showtimes[i].theatre.name;
+                if (movieDate+" "+movieTime >= moment().format("YYYY-MM-DD h:mm A") || i == movie.showtimes.length - 1){
+                    nearest_time = true;
+                }
+                i++;
+              }
+              var movieCard = $(`
+                  <div class="col-sm-3"></div>
+                  <div class="col-sm-9">
+                      <div class="card justify-content-center" style="width: 17rem; margin-top: 10px">
+                          <ul class="list-group list-group-flush">
+                              <li class="list-group-item">${movieTitle}</li>
+                              <li class="list-group-item">${movieDate}</li>
+                              <li class="list-group-item">${movieTime}</li>
+                              <li class="list-group-item">${movieTheatre}</li>
+                              <a href="#" id=button-view class="btn btn-primary">Add to Calendar</a>
+                          </ul>
+                      </div>
+                  </div>
+              `);
+              $("#movieContent").append(movieCard);
+            });
+            $("#movieContent").on("click", "#button-view", function() {
+                $(this).attr("data-toggle", "modal");
+                $(this).attr("data-target", "#movie-modal");
+              var movieBtn = $(this).siblings();
+              //adds the specific movie as an event
+              add_event(sessionStorage.getItem("uid"), movieBtn[0].innerText+" (Movie)", moment(movieBtn[2].innerText, "hh:mm A").format("HH:mm"), moment(movieBtn[2].innerText, "hh:mm A").add(2, 'hours').format("HH:mm"), moment(movieBtn[1].innerText, "YYYY-MM-DD"), sessionStorage.getItem("zip"), sessionStorage.getItem("movie_zip"));
+              $("#movieContent").html("");
+              $("#start-input").val("");
+              $("#movieInputZip").val("");
+            });
+          
+      });
+    }
+  });
 
-
-  // function create_user(email, password){
-  //     firebase.auth().createUserWithEmailAndPassword(email, password).catch(onResolve, onReject) {
-  //         // Handle Errors here.
-  //         ;
-  //     };
-
-  // }
+  //This function checks if the signup forms are valid. If they are, a new user is created with Firebase Authentication
   function create_user(email, password){
       firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
           // Handle Errors here.
           var errorCode = error.code;
           var errorMessage = error.message;
-          // ...
+    
           $("#error-body").text(errorMessage);
           $("#myModal").modal('show');
-          $("#myModal").modal('show');
-          
+
           $("#inputName").val("");
           $("#inputEmail").text("");
           $("#inputPassword").val("");
@@ -138,17 +99,16 @@ $(document).ready(function(){
           $("#inputCity").val("");
           $("#inputState").val("");
           $("#inputZip").val("");
-
-
         });
   }
 
+  //This function checks if sign in credentials are valid, and displays an error message if they are not
   function sign_in(email, password){
       firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
           // Handle Errors here.
           var errorCode = error.code;
           var errorMessage = error.message;
-          // ...
+        
           $("#error-body").text(errorMessage);
           $("#myModal").modal('show');
           $("#myModal").modal('show');
@@ -159,7 +119,7 @@ $(document).ready(function(){
         });
   }
 
-
+  //This function verifies that a zip is valid based on finding results in the Geonames API
   function location_verification(zip){
       var len = "hello";
       queryURL = "http://api.geonames.org/postalCodeSearchJSON?postalcode=" + zip + "&maxRows=10&username=charles.glass";
@@ -167,22 +127,19 @@ $(document).ready(function(){
           url: queryURL,
           method: "GET"
         }).then(function(response) {
-              console.log(response);
               localStorage.clear();
               localStorage.setItem("len", response.postalCodes.length);
       });
-      console.log(zip.length);
-      console.log(len);
+
       if ((zip.length == 5) && (localStorage.getItem("len")> 0)){
-          console.log("The length is definitely 5");
           return true;
       }
       else{
-          console.log("no it's not");
           return false;
       }
   }
 
+  //Function verifies that city, state, name, and other str fields are more than 0 characters long
   function city_state_name_verification(city, state, name){
       if ((city.length > 0) && (state.length > 0) && (name.length > 0)){
           return true;
@@ -192,7 +149,7 @@ $(document).ready(function(){
       }
   }
 
-
+  //This function checks if the user retyped their password correctly
   function confirm_password(pass, confirm){
       if (pass == confirm){
           return true;
@@ -202,39 +159,33 @@ $(document).ready(function(){
       }
   }
 
-
+  //This function returns whether the form submitted is the Sign-In or Sign-Up form
   function which_form(){
       return $(".submit-btn").text();
   }
 
+  //This function checks the sign form for valid entries in required fields and submits it if everything is indeed valid
   function send_sign_form(){
       var form = which_form();
       if (form == "Sign Up"){
           var errors = [];
-          console.log($("#inputState").val().trim());
-          console.log($("#inputName").val().trim());
           var str_field_check = city_state_name_verification($("#inputCity").val().trim(), $("#inputState").val().trim(), $("#inputName").val().trim());
           var location_check = location_verification($("#inputZip").val().trim());
           var confirm_check = confirm_password($("#inputPassword").val(), $("#inputConfirmPassword").val());
-          console.log(location_check);
           if (str_field_check == false){
-              console.log("str_error");
               errors.push("Please fill in all required fields");
           }
           if (location_check == false){
-              console.log("loc_error");
               errors.push("Please enter a valid Zip Code");
           }
           if (confirm_check == false){
-              console.log("confirm_error");
               errors.push("Your password confirmation failed");
           };
-          console.log(errors);
           if (errors.length == 0){
+              //Create the user if there are no errors
               create_user($("#inputEmail").val().trim(), $("#inputPassword").val());
           }
           else{
-              console.log("There were errors");
               $("#error-body").html("");
               $("#error-body").append($("<div>").text("There are error(s) with your submission:"));
               errors.forEach(function(value){
@@ -255,20 +206,19 @@ $(document).ready(function(){
           }
       }
       else{
+          //signs the user in if the sign in form was submitted
           sign_in($("#inputEmail").val().trim(), $("#inputPassword").val().trim());
       }
   }
 
+  //This function checks if the event form entries are valid, and creates the event in Firebase if they all were
   function send_event_form(){
       var errors = [];
-      console.log($("#event-title"));
       var even_titl = $("#event-title").val().trim();
-      console.log(even_titl);
       var str_field_origin_check = true;
       var str_field_dest_check = true;
       var zip_dest_check = true;
       var zip_origin_check = true;
-      console.log($("#event-location").val().trim());
       var location_setting_event = $("#event-location").val().trim();
       if (location_setting_event != "default-location"){
           zip_dest_check = location_verification($("#event_loc_inputZip").val().trim());
@@ -283,7 +233,6 @@ $(document).ready(function(){
       }
 
       if (str_field_origin_check == false || str_field_dest_check == false){
-          console.log("str_error");
           errors.push("Please fill in all required fields");
       }
 
@@ -322,13 +271,7 @@ $(document).ready(function(){
         else{
             zip_origin = $("#event_origin_inputZip").val().trim();
         }
-        console.log(sessionStorage.getItem("uid"));
-        console.log(even_titl);
-        console.log(moment($("#event-start-time").val().trim(), "HH:mm").format("HH:mm"));
-        console.log(moment($("#event-end-time").val().trim(), "HH:mm").format("HH:mm"));
-        console.log(moment($("#event-start-date").val().trim(), "YYYY-MM-DD"));
-        console.log(zip_origin);
-        console.log(zip_event);
+        //adds the event if no errors
         add_event(sessionStorage.getItem("uid"), even_titl, moment($("#event-start-time").val().trim(), "HH:mm").format("HH:mm"), moment($("#event-end-time").val().trim(), "HH:mm").format("HH:mm"), moment($("#event-start-date").val().trim(), "YYYY-MM-DD"), zip_origin, zip_event);
     }
     else{
@@ -341,22 +284,10 @@ $(document).ready(function(){
 
     }
 
-    // $("#event_origin_inputCity").val("");
-    // $("#event_origin_inputState").val("");
-    // $("#event_origin_inputAddress").val("");
-    // $("#event_loc_inputCity").val("");
-    // $("#event_loc_inputState").val("");
-    // $("#event_loc_inputAddress").val("");
-    // $("#event_title").val("");   
-    // $("#event-start-date").val("");     
-    // $("#event-end-time").val("");
-    // $("#event-start-time").val("");     
-    // $("#event_origin_inputZip").val("");
-    // $("#event_loc_inputZip").val("");
-
 
   }
 
+  //This function adds the event information to firebase in a user/events/month path
   function add_event(uid, title, start_time, end_time, start_date, start_loc, end_loc){
       database.ref(uid+"/events/"+start_date.format("MMM")).push({
           event_title: title,
@@ -366,14 +297,16 @@ $(document).ready(function(){
           start_loc: start_loc,
           end_loc: end_loc
       });
-
+      //loads the calendar again after the event is added
       load_calendar(moment(), uid);
   }
 
+  //This Firebase function occurs when a user signs in or signs out, extracts the user's unique id, and sets Firebase values based on given inputs
   firebase.auth().onAuthStateChanged(function(user) {
       if (user) {
         // User is signed in.
         sessionStorage.setItem("uid", user.uid);
+        //Checks that the user just signed up
         if(which_form() == "Sign Up" && $("#inputName").val().trim() != ""){
           database.ref(user.uid).set({
               name: $("#inputName").val().trim(),
@@ -390,13 +323,7 @@ $(document).ready(function(){
                   last_login: moment().format("YYYY-MM-DD hh:mm a")
               });
           }
-      // database.ref(user.uid).on("value", function(snapshot){
-      //     console.log("working");
-      //     sessionStorage.clear();
-      //     sessionStorage.setItem("name", snapshot.val().name);
-      //     console.log("name in storage");
-      //     sessionStorage.setItem("zip", snapshot.val().zip);
-          // $("#name-calendar").text(sessionStorage.getItem("name")+ "'s Calendar");
+
           
         load_calendar(moment(), user.uid);
         $("#inputName").val("");
@@ -411,22 +338,12 @@ $(document).ready(function(){
     });
 
     
-
+    //This function retrieves user and event info from Firebase, and dynamically creates the calendar with current week dates, the user's events, and current and forecasted weather conditions, including the dynamic background
   function load_calendar(date, uid){
       database.ref(uid).once("value").then(function(snapshot){
           database.ref(uid+"/events/"+date.format("MMM")).once("value").then(function(snapshot_event){
-            console.log(uid+"/events/"+date.format("MMM"));
-            console.log(snapshot_event);
-            console.log("working");
             var events = [];
             snapshot_event.forEach(function(value){
-                console.log(value);
-                console.log(value.val().event_title);
-                console.log(value.val().start_date);
-                console.log(value.val().start_time);
-                console.log(value.val().end_time);
-                console.log(value.val().start_loc);
-                console.log(value.val().end_loc);
                 events.push({
                     event_title: value.val().event_title,
                     start_date: value.val().start_date,
@@ -436,15 +353,14 @@ $(document).ready(function(){
                     end_loc: value.val().end_loc
                 });
             });
-            //   sessionStorage.clear();
             sessionStorage.setItem("name", snapshot.val().name);
-            console.log("name in storage");
             sessionStorage.setItem("zip", snapshot.val().zip);
             var zip = sessionStorage.getItem("zip");
             var weather_data;
             var weather_api = "265a46d65db9c9a8b164aa9180136f67";
             var weatherQuery = "https://api.openweathermap.org/data/2.5/forecast?zip="+sessionStorage.getItem("zip")+",us&appid="+weather_api;
             
+            //Gets current weather and future weather with API call
             var weather = "";
             $.ajax({
                 url: weatherQuery,
@@ -456,40 +372,37 @@ $(document).ready(function(){
                     url: weatherQuery,
                     method: "GET"
                     }).then(function(response) {
+                        //Creates Month Year caption for calendar
                         $("#month-caption").text("");
                         $("#month-caption").prepend(date.format('MMMM YYYY'));
-
-                        // $("#name-calendar").text(sessionStorage.getItem("name")+ "'s Calendar");
                         
-                        console.log("scrollTop: " + $(".calendar").scrollTop);
-                        
+                        //Shows inputted date as the default date jump text
                         $("#date-jump-text").val(date.format("YYYY-MM-DD"));
 
+                        //Hides sign-in/sign-up forms
                         $(".sign-in").hide();
                         $(".calendar-container").show();
                         $(".nav-events").show();
                         $(".credit").show();
                 
+                        //Shows background video
                         $("#myVideo").show();
                         $("tbody").html("");
 
+                        //Sets name
                         $("#name-calendar").text(sessionStorage.getItem("name")+ "'s Calendar");
                         var current_weather = sessionStorage.getItem("weather");
-                        console.log("name on screen");
-                        console.log(response_main);
-                        console.log(response_main.list);
                         weather_data = response_main.list;
+
+                        //for loop creates the dates frozen header in the calendar with current and forecasted weather conditions
                         for (var i = 1; i < 8; i++){
                             var current_date = moment(date.format('MMM D YYYY'), 'MMM D YYYY');
-                            console.log(date.format('MMM Do'));
                             var dt = current_date.add(i-1, 'days');
-                            console.log(i-1+": "+dt.format('MMM Do'));
                             var weather_html = "";
                             if (dt.format("YYYY-MM-DD") == moment().format("YYYY-MM-DD")){
                                 var current_date_2 = moment(dt.format('MMM D YYYY'), 'MMM D YYYY');
-                                console.log("current date_2: " + current_date_2.format("YYYY-MM-DD"));
                                         var weather_html = "";
-                                        console.log(response.weather);
+                                        //Creates weather icons
                                         if (response.weather["0"].main == "Snow"){
                                             weather = "Snow";
                                             weather_html = "<i class = 'fas fa-snowflake' style = 'font-size:36px;color:lightblue'></i>";
@@ -508,8 +421,8 @@ $(document).ready(function(){
                         
                                         }
                                         sessionStorage.setItem("weather", weather);
+                                        //Sets currently selected date to blue background with white text
                                         if (i == 1){
-                                            console.log("day 1 is: " + current_date_2.format("YYYY-MM-DD"));
                                             $("#day-1-date").html("<span class = 'day-display'>"+current_date_2.format('dddd')+"</span><br>"+weather_html+"<br> <span class = 'date-display'>"+current_date_2.format('D')+"</span>");
                                             $("#day-1-date").css("background-color", "#007bff");
                                             $("#day-1-date").css("border-radius", "none !important");
@@ -524,7 +437,6 @@ $(document).ready(function(){
                                             weather_html = "<i class = 'fas fa-snowflake' style = 'font-size:36px;color:lightblue'></i>";
                                         }
                                         else if (value.weather["0"].main == "Rain" || value.weather["0"].main == "Mist"){
-                                            console.log(dt.format('MMM Do') + " rain");
                                             weather_html = "<i class = 'fas fa-cloud-rain' style = 'font-size:36px;color:lightblue'></i>";
                                         }
                                         else if (value.weather["0"].main == "Clouds"){
@@ -540,7 +452,6 @@ $(document).ready(function(){
                                             weather_html = "<i class = 'fas fa-snowflake' style = 'font-size:36px;color:lightblue'></i>";
                                         }
                                         else if (value.weather["0"].main == "Rain" || value.weather["0"].main == "Mist"){
-                                            console.log(dt.format('MMM Do') + " rain");
                                             weather_html = "<i class = 'fas fa-cloud-rain' style = 'font-size:36px;color:lightblue'></i>";
                                         }
                                         else if (value.weather["0"].main == "Clouds"){
@@ -558,14 +469,12 @@ $(document).ready(function(){
                                 weather_html = "<i class = 'fas fa-sun' style = 'font-size:36px;color:transparent;'></i>";
                             }
 
+                            //Creates date header for each date
                             $("#day-"+i+"-date").html("<span class = 'day-display'>"+dt.format('dddd')+"</span><br>"+weather_html+"<br> <span class = 'date-display'>"+dt.format('D')+"</span>");
-                            console.log("current days: "+dt.format("YYYY-MM-DD"));
-                            // $("#day-"+i+"-date").attr("data-date", "");
                             $("#day-"+i+"-date").attr("data-date", dt.format("YYYY-MM-DD"));
-                            console.log($("#day-"+i+"-date").data("date"));
         
+                            //No right border on last day of calendar
                             $("day-7-date").css("border-right", "none !important");
-                            // sessionStorage.setItem("weather", weather);
                             if (sessionStorage.getItem("weather") != "Clear" || moment().format("HH:mm") >= "17:30" || moment().format("HH:mm") <= "06:30"){
                                 $(".day-display").css("color", "white");
                                 $(".date-display").css("color", "white");
@@ -573,6 +482,7 @@ $(document).ready(function(){
                         };
                         var calendar_body = $("tbody");
 
+                        //for loop dynamically creates the time cells
                         for (var i = 0; i < 24; i++){
                             var original_time = moment("2019-01-01 12:00 am", "YYYY-MM-DD h:mm a");
                             var time = original_time.add(i, 'hours');
@@ -584,7 +494,6 @@ $(document).ready(function(){
                             for (var j = 0; j < 7; j++){
                                 var cell = $("<td>");
                                 var day = j+1;
-                                console.log($("#day-"+day+"-date").attr("data-date"));
                                 if (j==6){
                                     cell.css("border-right", "none !important");
                                 }
@@ -594,7 +503,6 @@ $(document).ready(function(){
                                 // cell.attr("data-datetime", "");
                                 cell.attr("data-datetime", $("#day-"+day+"-date").attr("data-date")+ " " + time.format("HH:mm"));
                                 cell.data("datetime", $("#day-"+day+"-date").attr("data-date")+ " " + time.format("HH:mm"));
-                                console.log(cell.attr("data-datetime"));
                                 cell.addClass("event-cell");
                                 cell.val(time.format("HH:mm"));
                                 cell.attr("data-toggle", "modal");
@@ -607,23 +515,16 @@ $(document).ready(function(){
                         $("#scroll-body").append(calendar_body);
                         $("#scroll-body").scrollTop(parseFloat(moment().format("HH"))*116);
 
-                        console.log(events);
+                        //This for loop dynamically styles and sets the title of the given event based on time and weather
                         for(var i = 0; i < events.length; i++){
-                            console.log(events[i]);
-                            console.log("doing shit");
                             var start_datetime =events[i].start_date + " " +events[i].start_time;
-                            console.log(start_datetime);
                             var start_datetime_lookup =events[i].start_date + " " + moment(events[i].start_time, "HH:mm").format("HH")+":00";
-                            console.log(start_datetime_lookup);
                             var end_datetime =events[i].start_date + " " +events[i].end_time;
-                            console.log(end_datetime);
 
                             var focused_cell = $("td[data-datetime = '"+start_datetime_lookup+"']");
                             focused_cell.html("");
-                            console.log(focused_cell);
                             if (moment(start_datetime, "YYYY-MM-DD HH:mm").diff(moment(start_datetime_lookup, "YYYY-MM-DD HH:mm"), "minutes") >= 30){
-                                console.log(":30");
-                                if (sessionStorage.getItem("weather") != "Clear"){
+                                if (sessionStorage.getItem("weather") != "Clear" || moment().format("HH:mm") >= "17:30" || moment().format("HH:mm") <= "06:30"){
                                     focused_cell.css("background", "linear-gradient(to bottom, #212529 0%,#212529 50%,#212529 50%,#007bff 50%,#007bff 100%)");
                                 }
                                 else{
@@ -657,8 +558,7 @@ $(document).ready(function(){
                             }
 
                             else if (moment(end_datetime, "YYYY-MM-DD HH:mm").diff(moment(start_datetime, "YYYY-MM-DD HH:mm"), "minutes") <= 30){
-                                console.log("half hour event");
-                                if (sessionStorage.getItem("weather") != "Clear"){
+                                if (sessionStorage.getItem("weather") != "Clear" || moment().format("HH:mm") >= "17:30" || moment().format("HH:mm") <= "06:30"){
                                     focused_cell.css("background", "linear-gradient(to bottom, #007bff 0%,#007bff 50%,#007bff 50%,#212529 50%,#212529 100%)");
                                 }
                                 else{
@@ -692,7 +592,6 @@ $(document).ready(function(){
                             }
 
                             else{
-                                console.log("fuck");
                                 focused_cell.css("background-color", "#007bff");
                                 var title_div = $("<div>");
                                 title_div.css("position", "absolute");
@@ -723,6 +622,7 @@ $(document).ready(function(){
 
                             var populating_event_cell = true;
                             var j = 1;
+                            //Keeps setting background to blue until endtime
                             while (populating_event_cell == true){
                                 var focused_time = moment(start_datetime_lookup, "YYYY-MM-DD HH:mm").add(j, "hours").format("YYYY-MM-DD HH:mm");
                                 var focused_added_cell = $("td[data-datetime = '"+focused_time+"']");
@@ -730,12 +630,11 @@ $(document).ready(function(){
                                     populating_event_cell = false;
                                 }
                                 else if (moment(end_datetime, "YYYY-MM-DD HH:mm").diff(moment(focused_time, "YYYY-MM-DD HH:mm"), 'minutes') <= 30){
-                                    if (sessionStorage.getItem("weather") == "Clear"){
-                                        focused_added_cell.css("background", "linear-gradient(to bottom, #007bff 0%,#007bff 50%,#007bff 50%,white 50%,white 100%)");
+                                    if (sessionStorage.getItem("weather") != "Clear" || moment().format("HH:mm") >= "17:30" || moment().format("HH:mm") <= "06:30"){
+                                        focused_added_cell.css("background", "linear-gradient(to bottom, #007bff 0%,#007bff 50%,#007bff 50%,#212529 50%,#212529 100%)");
                                     }
                                     else{
-                                        focused_added_cell.css("background", "linear-gradient(to bottom, #007bff 0%,#007bff 50%,#007bff 50%,#212529 50%,#212529 100%)");
-
+                                        focused_added_cell.css("background", "linear-gradient(to bottom, #007bff 0%,#007bff 50%,#007bff 50%,white 50%,white 100%)");
                                     }
                                     var title_div = $("<div>");
                                     title_div.css("position", "absolute");
@@ -790,11 +689,11 @@ $(document).ready(function(){
                                     title_div.text("");
                                     focused_added_cell.append(title_div);
                                 }
-                                console.log(populating_event_cell);
                                 j++;
                                 
                             }
                         };
+                        //Shows popover with event information on hover
                         $('[data-toggle="popover"]').popover();
                         current_weather = sessionStorage.getItem("weather");
                         if (current_weather == "Clouds"){
@@ -824,7 +723,6 @@ $(document).ready(function(){
                         $(".date-jump-submit").on("click", function(event){
                             event.preventDefault();
                             if (moment($("#date-jump-text").val(), "YYYY-MM-DD").isValid()){
-                                console.log(moment($("#date-jump-text").val(), "YYYY-MM-DD").format("YYYY-MM-DD"));
                                 $("tbody").html("");
                                 load_calendar(moment($("#date-jump-text").val(), "YYYY-MM-DD"), sessionStorage.getItem("uid"));
                                 database.ref(sessionStorage.getItem("uid")).update({
@@ -832,7 +730,6 @@ $(document).ready(function(){
                                 });
                             }
                             else{
-                                console.log("No");
                             }
                         });
                 });
@@ -840,17 +737,46 @@ $(document).ready(function(){
             });
 
             });
-            
+
+            //Reminds users of upcoming events within 15 minutes, and will do so every 10 minutes
+            reminder_popup();
+            setInterval(reminder_popup, 600000);
+            function reminder_popup(){
+                    $("#reminder-body").html("");
+                    database.ref(uid+"/events/"+date.format("MMM")).once("value").then(function(snap){  
+                          var reminders = [];
+                        snap.forEach(function(value){
+                            var reminder_warning = 15;
+                            var event_datetime = value.val().start_date + " " + value.val().start_time;
+                            var reminder = "";
+                            if (moment().add(reminder_warning, 'minutes').format("YYYY-MM-DD HH:mm") >= event_datetime && moment().format("YYYY-MM-DD HH:mm") < event_datetime){
+                                reminder = "<b>"+value.val().event_title + "</b> is coming up at <b>"+ moment(event_datetime, "YYYY-MM-DD HH:mm").format("MMM D, YYYY h:mm A") + "</b>.";
+                                reminders.push(reminder);
+                            }
+                        });
+                            if (reminders.length > 0){
+                                reminders.forEach(function(value){
+                                    $("#reminder-body").append($("<div>").html(value));
+                                });
+                                $("#myReminderModal").modal('show');
+                            }
+                            else{
+                            }
+
+ 
+                        });
+                }
+
         });
 
   }
-
+    //Hides calendar components when user first goes to page and does so until sign-in/sign-up
     $("#myVideo").hide();
     $(".calendar-container").hide();
     $(".nav-events").hide();
     $(".credit").hide();
 
-
+    //Adds more fields to event form if you want to add a new location (default is the zip you signed up with)
     $("#event-address").hide();
     $("#event-location").change(function(){
     if ($("#event-location").val() == "add-location") {
@@ -869,30 +795,30 @@ $(document).ready(function(){
     }
     });
   
-
+    //Sends event form
   $("#event-submit").on("click", function(event){
       event.preventDefault();
       send_event_form();
   });
+  //Sends sign form
   $(".submit-btn").on("click", function(event){
     event.preventDefault();
     send_sign_form();
     });
+    //Sets background color of sign page sign in button and hides sign up info
   $(".sign-in-select").on("click", function(){
-      console.log($(this));
       $(this).css("color", "white");
       $(this).css("background-color", "#007bff");
       $(".sign-up-select").css("color", "black");
       $(".sign-up-select").css("background-color", "white");
-
 
       $(".exclusive").hide();
 
       $(".submit-btn").text("Sign In");
   });
 
+  //Sets sign up button to different color
   $(".sign-up-select").on("click", function(){
-      console.log($(this));
       $(this).css("color", "white");
       $(this).css("background-color", "#007bff");
       $(".sign-in-select").css("color", "black");
@@ -903,6 +829,7 @@ $(document).ready(function(){
       $(".submit-btn").text("Sign Up");
   });
 
+  //Uses firebase to sign user out and hides calendar elements to show sign elements again
   $("#sign-out").on("click", function(){
       firebase.auth().signOut().then(function() {
           // Sign-out successful.
@@ -934,72 +861,10 @@ $(document).ready(function(){
 
   });
 
-
-
-  //var someID = '';
   $(document).on("click", ".event-cell", function(){
             // Adds the calendar time selection to the start time input on event form
             $("#event-start-time").val($(this).val());//puts start time in event modal relative to cell selected
             $("#event-start-date").val($(this).attr("data-datetime").split(" ")[0]);
             $("#event-end-time").val(moment($(this).val(), "HH:mm").add(1, 'hours').format("HH:mm"));
-        //     console.log("time: " + $(this).val());
-        //     $(this).css("background", "linear-gradient(to bottom, #212529 0%,#212529 50%,#212529 50%,#007bff 50%,#007bff 100%)");
-        //     someID = $(this).attr("data-datetime").split(' ').join('');
-        //     var span = $("<div>");
-        //     span.attr('id', someID)
-        //     span.css("position", "absolute");
-        //     span.css("height", "50%");
-        //     span.css("width", "100%");
-        //     span.css("overflow", "hidden");
-        //     span.css("text-overflow", "ellipsis");
-        //     span.css("bottom", "0");
-        //     span.css("left", "0");
-        //     span.css("display", "block");
-        //     span.css("white-space", "nowrap");
-        //     $(this).append(span);  
-        //     // Adds event title to calendar
-
-        //   $("#event-submit").on("click", function(e){
-        //     e.preventDefault();
-        //     var eventTitle = $("#event-title").val();
-        //     var eventAddress = $("#event-address").val();
-        //     var eventCity = $("#event-city").val();
-        //     var eventState = $("#event-state").val();
-        //     var eventZip = $("#event-zip").val();
-        //     var whatwewant = document.getElementById(someID);
-        //     whatwewant.innerHTML = eventTitle;
-        //     $("#event-title").val("");
-        //     $("#event-address").val("");
-        //     $("#event-city").val("");
-        //     $("#event-state").val("");
-        //     $("#event-zip").val("");
-            // showNavEnd();
-            // showNavStart();
-        });
-
-      // Function to show event address input on event form
-    //   $(function(showNavEnd){
-    //     $("#event-address").hide();
-    //     $("#event-location").change(function(){
-    //       if ($("#event-location").val() == "add-location") {
-    //         $("#event-address").show();
-    //       } else {
-    //         $("#event-address").hide();
-    //         }
-    //     });
-    //   });
-        
-    //   // Function to show starting address input on event form
-    //   $(function(showNavStart){
-    //     $("#start-address").hide();
-    //     $("#start-location").change(function(){
-    //       if ($("#start-location").val() == "add-location") {
-    //         $("#start-address").show();
-    //       } else {
-    //         $("#start-address").hide();
-    //         }
-    //     });
-    //   });
-
-//});
+    });
 
