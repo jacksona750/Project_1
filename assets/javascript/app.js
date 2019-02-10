@@ -122,7 +122,7 @@ $(document).ready(function(){
   //This function verifies that a zip is valid based on finding results in the Geonames API
   function location_verification(zip){
       var len = "hello";
-      queryURL = "http://api.geonames.org/postalCodeSearchJSON?postalcode=" + zip + "&maxRows=10&username=charles.glass";
+      queryURL = "https://api.geonames.org/postalCodeSearchJSON?postalcode=" + zip + "&maxRows=10&username=charles.glass";
       $.ajax({
           url: queryURL,
           method: "GET"
