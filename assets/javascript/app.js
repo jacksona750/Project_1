@@ -17,7 +17,7 @@ $(document).ready(function(){
     
     if (e.keyCode == 13) { //triggers when a user presses enter after filling out a valid zip
       var apikey = "8me7ng6utpessays6nzfdsut";
-      var baseUrl = "http://data.tmsapi.com/v1.1/movies/showings?startDate=";
+      var baseUrl = "https://data.tmsapi.com/v1.1/movies/showings?startDate=";
       var zipCode = $("#movieInputZip").val();
       sessionStorage.setItem("movie_zip", zipCode);
       var movieDate = $("#start-input").val().trim();
