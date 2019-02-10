@@ -121,17 +121,17 @@ $(document).ready(function(){
 
   //This function verifies that a zip is valid based on finding results in the Geonames API
   function location_verification(zip){
-      var len = "hello";
-      queryURL = "https://api.geonames.org/postalCodeSearchJSON?postalcode=" + zip + "&maxRows=10&username=charles.glass";
-      $.ajax({
-          url: queryURL,
-          method: "GET"
-        }).then(function(response) {
-              localStorage.clear();
-              localStorage.setItem("len", response.postalCodes.length);
-      });
+    //   var len = "hello";
+    //   queryURL = "https://api.geonames.org/postalCodeSearchJSON?postalcode=" + zip + "&maxRows=10&username=charles.glass";
+    //   $.ajax({
+    //       url: queryURL,
+    //       method: "GET"
+    //     }).then(function(response) {
+    //           localStorage.clear();
+    //           localStorage.setItem("len", response.postalCodes.length);
+    //   });
 
-      if ((zip.length == 5) && (localStorage.getItem("len")> 0)){
+      if ((zip.length == 5) && (parseFloat(zip) != null)){
           return true;
       }
       else{
