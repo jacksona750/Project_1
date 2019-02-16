@@ -1,5 +1,7 @@
 # Project 1: Calendar App
 
+[Check out the site here!] (https://jacksona750.github.io/Project_1/index.html)
+
 Welcome to the Calendar App, the application that allows users to build time management skills and progressively monitor future events with weather variables.
 
 The application features an up to date calendar that outlines the user's week of events and forecasts weather (based on <b>Zip Code</b>) provided by the <b>Weather API</b>. This component allows users to base future events on weather predictions and no longer be stunted by a rainy day! 
